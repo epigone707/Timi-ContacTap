@@ -7,7 +7,7 @@
 ![Elevator Pitch](/assets/title.png)
 ![Team](/assets/team.png)
 
-[demo_page]: https://youtu.be/sample
-[wiki_page]: https://github.com/member/team/wiki
+[demo_page]: https://www.youtube.com/watch?v=8MrBdQ2NzP8
+[wiki_page]: https://github.com/epigone707/Timi-ContacTap/wiki
 [process_page]: https://trello.com/b/TqJAwI0i/contactap
 
