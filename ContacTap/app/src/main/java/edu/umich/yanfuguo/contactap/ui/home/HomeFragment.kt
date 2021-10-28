@@ -39,18 +39,7 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        val shareButton: ExtendedFloatingActionButton = binding.homeShareFab
-        // When click on the share button on the right bottom corner,
-        // start the ShareActivity
-        shareButton.setOnClickListener{
-            requireActivity().run{
-                startActivity(Intent(this, ShareActivity::class.java))
-                finish()
-            }
-        }
         return root
-
-
     }
 
     override fun onDestroyView() {

@@ -29,6 +29,7 @@
         android:textSize="20sp"
         android:text="@string/button_share_text"
         android:textColor="@color/white"
+        android:onClick="startShareActivity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:textAlignment="center"
