@@ -12,7 +12,6 @@
         <activity
             android:name=".ui.ShareActivity"
             android:label="Share"
-            android:parentActivityName=".MainActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
