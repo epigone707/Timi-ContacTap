@@ -14,6 +14,10 @@
             android:label="Share"
             android:exported="true" />
         <activity
+            android:name=".ui.ProfileListActivity"
+            android:label="My Profiles"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

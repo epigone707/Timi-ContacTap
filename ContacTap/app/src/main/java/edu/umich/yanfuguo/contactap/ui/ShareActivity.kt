@@ -11,6 +11,9 @@ class ShareActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
+
+        // get profile name from profile list activity
+        val selectedProfile = intent.getStringExtra("profile selected")
     }
 
     override fun onSupportNavigateUp(): Boolean {
