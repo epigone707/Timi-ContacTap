@@ -22,5 +22,6 @@
     <string name="userFullName">Your Name Here</string>
     <string name="editProfile">Edit</string>
     <string name="shareFromProfile">Share</string>
+    <string name="fab_content_description">fab</string>
 
 </resources>

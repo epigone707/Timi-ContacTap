@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import edu.umich.yanfuguo.contactap.R
 
 class ProfileListActivity: AppCompatActivity() {
@@ -14,6 +15,27 @@ class ProfileListActivity: AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
+
+        /* Instantiates headerAdapter and flowersAdapter. Both adapters are added to concatAdapter.
+        which displays the contents sequentially */
+        val headerAdapter = HeaderAdapter()
+        val flowersAdapter = FlowersAdapter { flower -> adapterOnClick(flower) }
+        val concatAdapter = ConcatAdapter(headerAdapter, flowersAdapter)
+
+        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        recyclerView.adapter = concatAdapter
+
+        flowersListViewModel.flowersLiveData.observe(this, {
+            it?.let {
+                flowersAdapter.submitList(it as MutableList<Flower>)
+                headerAdapter.updateFlowerCount(it.size)
+            }
+        })
+
+        val fab: View = findViewById(R.id.fab)
+        fab.setOnClickListener {
+            fabOnClick()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
