@@ -11,11 +11,11 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/nav_info"
-        android:name="edu.umich.yanfuguo.contactap.ui.contactinfo.ContactInfoFragment"
-        android:label="@string/menu_info"
-        tools:layout="@layout/fragment_contactinfo" />
+    <activity
+        android:id="@+id/nav_contact_info"
+        android:name="edu.umich.yanfuguo.contactap.ui.ContactInfoActivity"
+        android:label="@string/menu_contact_info"
+        tools:layout="@layout/activity_contact_info" />
 
     <fragment
         android:id="@+id/nav_profiles"
@@ -34,4 +34,5 @@
         android:name="edu.umich.yanfuguo.contactap.ui.ShareActivity"
         android:label="@string/menu_share"
         tools:layout="@layout/activity_share" />
+
 </navigation>
