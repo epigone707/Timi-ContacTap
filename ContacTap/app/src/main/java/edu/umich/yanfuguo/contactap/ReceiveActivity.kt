@@ -6,14 +6,12 @@ import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 
 
 class ReceiveActivity : AppCompatActivity() {
     private var mNfcAdapter: NfcAdapter? = null
     private var mPendingIntent: PendingIntent? = null
-    private lateinit var mTvView: TextView
+//    private lateinit var mTvView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +25,12 @@ class ReceiveActivity : AppCompatActivity() {
                 Intent(this, this.javaClass)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
             )
-        } else {
-            mTvView.text = getString(R.string.tv_noNfc)
         }
+//        } else {
+////            mTvView.text = getString(R.string.tv_noNfc)
+//            toast(getString(R.string.tv_noNfc))
+//
+//        }
 
     }
 
@@ -67,16 +68,18 @@ class ReceiveActivity : AppCompatActivity() {
             val str = record.str()
             builder.append(str).append("\n")
         }
-        mTvView.text = builder.toString()
+//        mTvView.text = builder.toString()
+        toast(builder.toString())
     }
 
     private fun initView() {
-        mTvView = findViewById<View>(R.id.nfc_activity_tv_info) as TextView
+//        mTvView = findViewById<View>(R.id.nfc_activity_tv_info) as TextView
     }
 
     private fun checkNFCEnable(): Boolean {
         return if (mNfcAdapter == null) {
-            mTvView.text = getString(R.string.tv_noNfc)
+//            mTvView.text = getString(R.string.tv_noNfc)
+            toast(getString(R.string.tv_noNfc))
             false
         } else {
             mNfcAdapter!!.isEnabled

@@ -20,7 +20,13 @@
         android:theme="@style/Theme.ContacTap">
         <activity
             android:name=".ReceiveActivity"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.ShareActivity"
             android:exported="true"
