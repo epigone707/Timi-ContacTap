@@ -55,4 +55,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startShareActivity(view: View?) = startActivity(Intent(this, ShareActivity::class.java))
+
+    fun startContactInfoActivity(view: View?) = startActivity(Intent(this, ContactInfoActivity::class.java))
 }
