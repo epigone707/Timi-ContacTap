@@ -12,7 +12,7 @@ import com.example.recyclersample.data.Profile
 import edu.umich.yanfuguo.contactap.R
 
 class ProfileAdapter(private val onClick: (Profile) -> Unit) :
-    ListAdapter<Profile, ProfileAdapter.ProfileViewHolder>(FlowerDiffCallback) {
+    ListAdapter<Profile, ProfileAdapter.ProfileViewHolder>(ProfileDiffCallback) {
 
     /* ViewHolder for Flower, takes in the inflated view and the onClick behavior. */
     class ProfileViewHolder(itemView: View, val onClick: (Profile) -> Unit) :
@@ -46,13 +46,13 @@ class ProfileAdapter(private val onClick: (Profile) -> Unit) :
 
     /* Gets current flower and uses it to bind view. */
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
-        val flower = getItem(position)
-        holder.bind(flower)
+        val profile = getItem(position)
+        holder.bind(profile)
 
     }
 }
 
-object FlowerDiffCallback : DiffUtil.ItemCallback<Profile>() {
+object ProfileDiffCallback : DiffUtil.ItemCallback<Profile>() {
     override fun areItemsTheSame(oldItem: Profile, newItem: Profile): Boolean {
         return oldItem == newItem
     }

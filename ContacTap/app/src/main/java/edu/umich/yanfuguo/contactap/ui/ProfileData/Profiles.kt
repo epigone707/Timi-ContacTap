@@ -24,13 +24,13 @@ fun profileList(resources: Resources): List<Profile> {
     return listOf(
         Profile(
             id = 1,
-            firstName = resources.getString(R.string.userFullName),
-            lastName = resources.getString(R.string.userFullName),
+            firstName = "Thomas",
+            lastName = "Gregart"
         ),
         Profile(
             id = 2,
-            firstName = resources.getString(R.string.userFullName),
-            lastName = resources.getString(R.string.userFullName),
-        ),
+            firstName = "Justin",
+            lastName = "Baker"
+        )
     )
 }

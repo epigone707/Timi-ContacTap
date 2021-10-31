@@ -17,6 +17,7 @@
             android:name=".ui.ProfileListActivity"
             android:label="My Profiles"
             android:exported="true" />
+        <activity android:name=".ui.ProfileData.AddProfileActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

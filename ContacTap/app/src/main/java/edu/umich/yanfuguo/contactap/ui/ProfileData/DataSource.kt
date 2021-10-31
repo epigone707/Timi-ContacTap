@@ -55,7 +55,7 @@ class DataSource(resources: Resources) {
         return null
     }
 
-    fun getFlowerList(): LiveData<List<Profile>> {
+    fun getProfileList(): LiveData<List<Profile>> {
         return profilesLiveData
     }
 
