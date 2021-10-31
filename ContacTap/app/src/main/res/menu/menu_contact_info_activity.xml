@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/cross_discard_edit_Button"
+        android:title="CrossDiscardEditButton"
+        android:icon="@drawable/ic_baseline_close_24"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/tick_Button"
+        android:title="TickButton"
+        android:icon="@drawable/ic_baseline_done_24"
+        app:showAsAction="always"/>
+
+</menu>
