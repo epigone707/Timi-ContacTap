@@ -1,6 +1,7 @@
 package edu.umich.yanfuguo.contactap.ui
 
 import android.R.layout.simple_spinner_dropdown_item
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -55,8 +56,20 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun toggleService(enable: Boolean) {
         val intent = Intent(this@ShareActivity, KHostApduService::class.java)
-        intent.putExtra("ndefMessage", "somedata")
-        if(enable) startService(intent) else stopService(intent)
+        intent.putExtra("ndefMessage", "Name: Place Holder, Phone: 1234567890, Email:1234567890@umich.edu")
+        if(enable) {
+            packageManager.setComponentEnabledSetting(
+                ComponentName(this@ShareActivity, KHostApduService::class.java),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP)
+            startService(intent)
+        } else {
+            packageManager.setComponentEnabledSetting(
+                ComponentName(this@ShareActivity, KHostApduService::class.java),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP)
+            stopService(intent)
+        }
     }
 
     private fun checkNFCEnable(): Boolean {
