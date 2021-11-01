@@ -6,19 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.ShareActivity">
 
-    <TextView
+    <Spinner
         android:id="@+id/profile_selector"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@android:drawable/editbox_background"
         android:drawablePadding="16dp"
-        android:hint="Select Profile"
         android:padding="12dp"
-        app:drawableRightCompat="@android:drawable/arrow_down_float"
+        android:background="@android:drawable/btn_dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:spinnerMode="dropdown"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profile_card"
@@ -77,6 +76,8 @@
         android:layout_marginBottom="8dp"
         android:text="Share"
         android:textSize="24sp"
+        android:onClick="toggleShare"
+        android:backgroundTint="@color/share_inactive"
         app:cornerRadius="1200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
