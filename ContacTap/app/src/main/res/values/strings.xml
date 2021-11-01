@@ -25,4 +25,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="button_share_text">SHARE</string>
+
+    <!-- ProfileList Strings -->
+    <string name="profilePic">Your Profile</string>
+    <string name="profileTitle">Profile</string>
+    <string name="userFullName">Your Name Here</string>
+    <string name="editProfile">Edit</string>
+    <string name="shareFromProfile">Share</string>
+    <string name="fab_content_description">fab</string>
+    <string name="done_button_text">Done</string>
+    <string name="add_profile">Add Profile</string>
+    <string name="first_name_edit_text">First Name</string>
+    <string name="last_name_edit_text">Last Name</string>
+
 </resources>
