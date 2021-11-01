@@ -1,10 +1,13 @@
 package edu.umich.yanfuguo.contactap
 
+import android.app.PendingIntent
 import android.content.Intent
+import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
-import com.google.android.material.snackbar.Snackbar
+    import android.view.View
+    import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,6 +24,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private var mNfcAdapter: NfcAdapter? = null
+    private var mPendingIntent: PendingIntent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,58 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        if (checkNFCEnable()) {
+            mPendingIntent = PendingIntent.getActivity(
+                this, 0,
+                Intent(this, this.javaClass)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mNfcAdapter?.enableForegroundDispatch(this, mPendingIntent, null, null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mNfcAdapter?.disableForegroundDispatch(this)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
+            intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)?.also { rawMessages ->
+                val messages: List<NdefMessage> = rawMessages.map { it as NdefMessage }
+                // Process the messages array.
+                parserNDEFMessage(messages)
+            }
+        }
+    }
+
+    private fun parserNDEFMessage(messages: List<NdefMessage>) {
+        val builder = StringBuilder()
+        val records = NdefMessageParser.parse(messages[0])
+        val size = records.size
+
+        for (i in 0 until size) {
+            val record = records.get(i)
+            val str = record.str()
+            builder.append(str).append("\n")
+        }
+        toast(builder.toString())
+    }
+
+    private fun checkNFCEnable(): Boolean {
+        return if (mNfcAdapter == null) {
+            toast(getString(R.string.tv_noNfc))
+            false
+        } else {
+            mNfcAdapter!!.isEnabled
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
