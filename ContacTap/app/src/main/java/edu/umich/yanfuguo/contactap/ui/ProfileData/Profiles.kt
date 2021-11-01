@@ -24,13 +24,18 @@ fun profileList(resources: Resources): List<Profile> {
     return listOf(
         Profile(
             id = 1,
-            firstName = "Thomas",
-            lastName = "Gregart"
+            firstName = "Umich profile",
+            lastName = "temp"
         ),
         Profile(
             id = 2,
-            firstName = "Justin",
-            lastName = "Baker"
+            firstName = "family profile",
+            lastName = "temp"
+        ) ,
+        Profile(
+            id = 3,
+            firstName = "internship profile",
+            lastName = "temp"
         )
     )
 }
