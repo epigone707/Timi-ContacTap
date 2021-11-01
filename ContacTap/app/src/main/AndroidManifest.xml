@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.umich.yanfuguo.contactap">
 
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.NFC" />
@@ -16,6 +15,7 @@
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
+
     <queries>
         <intent>
             <action android:name="com.android.camera.action.CROP" />
@@ -23,11 +23,6 @@
             <data android:mimeType="image/*" />
         </intent>
     </queries>
-
-    
-
-    
-
 
     <application
         android:allowBackup="true"
@@ -37,6 +32,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContacTap">
         <activity
+            android:name=".contactListActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.ContactInfoActivity"
             android:exported="true"
             android:label="@string/title_activity_contact_info" />
@@ -44,13 +42,11 @@
             android:name=".ui.ShareActivity"
             android:exported="true"
             android:label="Share" />
-
         <activity
             android:name=".ui.ProfileListActivity"
-            android:label="My Profiles"
-            android:exported="true" />
-        <activity android:name=".ui.ProfileData.AddProfileActivity"/>
-      
+            android:exported="true"
+            android:label="My Profiles" />
+        <activity android:name=".ui.ProfileData.AddProfileActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -63,9 +59,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 
