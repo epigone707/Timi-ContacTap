@@ -20,20 +20,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import edu.umich.yanfuguo.contactap.R
-import edu.umich.yanfuguo.contactap.databinding.ActivityContactInfoBinding
+import edu.umich.yanfuguo.contactap.databinding.ActivityWelcomeBinding
 import edu.umich.yanfuguo.contactap.display
 import edu.umich.yanfuguo.contactap.toast
 
 class WelcomeActivity : AppCompatActivity() {
 
-    private lateinit var contactInfoView: ActivityContactInfoBinding
+    private lateinit var contactInfoView: ActivityWelcomeBinding
 
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        contactInfoView = ActivityContactInfoBinding.inflate(layoutInflater)
+        contactInfoView = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(contactInfoView.root)
 
         val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
