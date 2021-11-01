@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.databinding.ActivityMainBinding
+import edu.umich.yanfuguo.contactap.ui.ContactInfoActivity
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_info,R.id.nav_profiles,R.id.nav_contacts, R.id.nav_share
+                R.id.nav_home, R.id.nav_contact_info,R.id.nav_profiles,R.id.nav_contacts, R.id.nav_share
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -113,4 +114,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startShareActivity(view: View?) = startActivity(Intent(this, ShareActivity::class.java))
+
+    fun startContactInfoActivity(view: View?) = startActivity(Intent(this, ContactInfoActivity::class.java))
 }
