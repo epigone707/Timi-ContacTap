@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.recyclersample.data
+package edu.umich.yanfuguo.contactap.ui.ProfileData
 
 
 data class Profile(
-    val id: Long,
-    val firstName: String,
-    val lastName: String,
+    val name: String,
+    val description: String,
 )

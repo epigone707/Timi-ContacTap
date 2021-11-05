@@ -1,63 +1,41 @@
-package edu.umich.yanfuguo.contactap.ui.ProfileData
+package edu.umich.yuangzh.kotlinChatter
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.example.recyclersample.data.Profile
+import android.widget.ArrayAdapter
+import edu.umich.yanfuguo.contactap.ui.ProfileData.Profile
 import edu.umich.yanfuguo.contactap.R
+import edu.umich.yanfuguo.contactap.databinding.ProfileItemBinding
+import edu.umich.yanfuguo.contactap.ui.ProfileData.ProfileStore.deleteProfile
+import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
-class ProfileAdapter(private val onClick: (Profile) -> Unit) :
-    ListAdapter<Profile, ProfileAdapter.ProfileViewHolder>(ProfileDiffCallback) {
+class ProfileAdapter(context: Context, users: ArrayList<Profile?>) :
+    ArrayAdapter<Profile?>(context, 0, users) {
 
-    /* ViewHolder for Flower, takes in the inflated view and the onClick behavior. */
-    class ProfileViewHolder(itemView: View, val onClick: (Profile) -> Unit) :
-        RecyclerView.ViewHolder(itemView) {
-        private val profileTitleView: TextView = itemView.findViewById(R.id.profileTitle)
-        //private val flowerImageView: ImageView = itemView.findViewById(R.id.flower_image)
-        private var currentProfile: Profile? = null
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val listItemView = (convertView?.tag /* reuse binding */ ?: run {
+            val rowView = LayoutInflater.from(context).inflate(R.layout.profile_item, parent, false)
+            rowView.tag = ProfileItemBinding.bind(rowView) // cache binding
+            rowView.tag
+        }) as ProfileItemBinding
 
-        init {
-            itemView.setOnClickListener {
-                currentProfile?.let {
-                    onClick(it)
-                }
+        getItem(position)?.run {
+            listItemView.profileTitle.text = name
+            listItemView.profileDescription.text = description
+            listItemView.shareButton.setOnClickListener{
+                val intent = Intent(context, ShareActivity::class.java)
+                intent.putExtra("profileId", position)
+                context.startActivity(intent)
+            }
+            listItemView.deleteButton.setOnClickListener{
+                deleteProfile(context, position)
+                notifyDataSetChanged()
             }
         }
 
-        /* Bind flower name and image. */
-        fun bind(profile: Profile) {
-            currentProfile = profile
-
-            profileTitleView.text = profile.firstName
-        }
-    }
-
-    /* Creates and inflates view and return FlowerViewHolder. */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.profile_item, parent, false)
-        return ProfileViewHolder(view, onClick)
-    }
-
-    /* Gets current flower and uses it to bind view. */
-    override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
-        val profile = getItem(position)
-        holder.bind(profile)
-
-    }
-}
-
-object ProfileDiffCallback : DiffUtil.ItemCallback<Profile>() {
-    override fun areItemsTheSame(oldItem: Profile, newItem: Profile): Boolean {
-        return oldItem == newItem
-    }
-
-    override fun areContentsTheSame(oldItem: Profile, newItem: Profile): Boolean {
-        return oldItem.id == newItem.id
+        return listItemView.root
     }
 }

@@ -11,15 +11,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import edu.umich.yanfuguo.contactap.KHostApduService
+import edu.umich.yanfuguo.contactap.nfc.KHostApduService
 import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.R.color.share_active
 import edu.umich.yanfuguo.contactap.R.color.share_inactive
 import edu.umich.yanfuguo.contactap.toast
+import edu.umich.yanfuguo.contactap.ui.ProfileData.ProfileStore.profiles
 
 class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var isSharing = false
+    private var selectedId = 0
     private lateinit var shareView: ActivityShareBinding
 
     private var mNfcAdapter: NfcAdapter? = null
@@ -35,9 +37,11 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         // init profile selection Spinner
-        val items = arrayOf("Personal", "Business", "EECS 441")
+        val items = profiles.map {p ->p?.name}
         val adapter = ArrayAdapter(this, simple_spinner_dropdown_item, items)
         shareView.profileSelector.adapter = adapter
+        shareView.profileSelector.setSelection(
+            intent.getIntExtra("profileId", selectedId))
         shareView.profileSelector.onItemSelectedListener = this
 
         // init NFC
@@ -109,9 +113,9 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        toast("Selected profile $pos")
+        selectedId = pos
+        shareView.headerTitle.text = profiles[selectedId]?.name
+        shareView.headerSubtitle.text = profiles[selectedId]?.description
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {

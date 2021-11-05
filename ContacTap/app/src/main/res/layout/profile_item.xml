@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
+                    android:paddingStart="16dp"
                     android:paddingTop="16dp">
 
                     <ImageView
@@ -60,10 +60,10 @@
                             android:textAppearance="?attr/textAppearanceHeadline6" />
 
                         <TextView
+                            android:id="@+id/profileDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/userFullName"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
@@ -71,31 +71,39 @@
                 </LinearLayout>
                 <!-- Buttons -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/shareButton"
                         style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:onClick="sendToShare"
                         android:text="@string/shareFromProfile" />
 
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/editButton"
                         style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="150dp"
+                        android:minWidth="48dp"
+                        android:paddingEnd="10dp"
                         app:icon="@drawable/ic_baseline_edit_24" />
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/deleteButton"
                         style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="10dp"
+                        android:minWidth="48dp"
                         app:icon="@drawable/ic_baseline_delete_24" />
                 </LinearLayout>
             </LinearLayout>

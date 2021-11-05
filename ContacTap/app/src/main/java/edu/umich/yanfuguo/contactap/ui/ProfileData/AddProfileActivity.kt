@@ -5,25 +5,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
 import edu.umich.yanfuguo.contactap.R
-
-const val PROFILE_FIRST_NAME = "fname"
-const val PROFILE_LAST_NAME = "lname"
+import edu.umich.yanfuguo.contactap.databinding.ActivityAddProfileBinding
 
 class AddProfileActivity : AppCompatActivity() {
-    private lateinit var addProfileFirstName: TextInputEditText
-    private lateinit var addProfileLastName: TextInputEditText
+    private lateinit var view: ActivityAddProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_profile)
+        view = ActivityAddProfileBinding.inflate(layoutInflater)
+        setContentView(view.root)
 
         findViewById<Button>(R.id.done_button).setOnClickListener {
             addProfile()
         }
-        addProfileFirstName = findViewById(R.id.add_first_name)
-        addProfileLastName = findViewById(R.id.add_last_name)
     }
 
     /* The onClick action for the done button. Closes the activity and returns the new flower name
@@ -33,13 +28,13 @@ class AddProfileActivity : AppCompatActivity() {
     private fun addProfile() {
         val resultIntent = Intent()
 
-        if (addProfileFirstName.text.isNullOrEmpty() || addProfileLastName.text.isNullOrEmpty()) {
+        if (view.name.text.isNullOrEmpty() || view.description.text.isNullOrEmpty()) {
             setResult(Activity.RESULT_CANCELED, resultIntent)
         } else {
-            val firstName = addProfileFirstName.text.toString()
-            val lastName = addProfileLastName.text.toString()
-            resultIntent.putExtra(PROFILE_FIRST_NAME, firstName)
-            resultIntent.putExtra(PROFILE_LAST_NAME, lastName)
+            val firstName = view.name.text.toString()
+            val lastName = view.description.text.toString()
+            resultIntent.putExtra("name", firstName)
+            resultIntent.putExtra("description", lastName)
             setResult(Activity.RESULT_OK, resultIntent)
         }
         finish()

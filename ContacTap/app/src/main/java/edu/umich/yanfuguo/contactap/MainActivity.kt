@@ -6,8 +6,7 @@ import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.Menu
-    import android.view.View
-    import com.google.android.material.snackbar.Snackbar
+import android.view.View
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,7 +16,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.databinding.ActivityMainBinding
+import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
 import edu.umich.yanfuguo.contactap.ui.ContactInfoActivity
+import edu.umich.yanfuguo.contactap.ui.ProfileData.ProfileStore
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +49,8 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        ProfileStore.init(this)
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this)
         if (checkNFCEnable()) {

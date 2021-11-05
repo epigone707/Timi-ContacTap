@@ -68,7 +68,7 @@
         </activity>
 
         <service
-            android:name=".KHostApduService"
+            android:name=".nfc.KHostApduService"
             android:enabled="false"
             android:exported="true"
             android:permission="android.permission.BIND_NFC_SERVICE">
