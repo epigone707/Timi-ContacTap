@@ -28,8 +28,6 @@ import android.widget.Button
 import android.widget.ImageView
 
 class ContactInfoFragment : Fragment() {
-
-    private lateinit var contactInfoViewModel: ContactInfoViewModel
     private var _binding: FragmentContactInfoBinding? = null
 
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
@@ -44,8 +42,6 @@ class ContactInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        contactInfoViewModel =
-            ViewModelProvider(this).get(ContactInfoViewModel::class.java)
 
         _binding = FragmentContactInfoBinding.inflate(inflater, container, false)
         val root: View = binding.root

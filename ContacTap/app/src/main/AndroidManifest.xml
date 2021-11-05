@@ -42,10 +42,6 @@
             android:name=".ui.ShareActivity"
             android:exported="true"
             android:label="Share" />
-        <activity
-            android:name=".ui.ProfileListActivity"
-            android:exported="true"
-            android:label="My Profiles" />
         <activity android:name=".ui.ProfileData.AddProfileActivity" />
         <activity
             android:name=".MainActivity"

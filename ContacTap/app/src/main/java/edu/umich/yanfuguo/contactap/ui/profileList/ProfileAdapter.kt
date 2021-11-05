@@ -1,4 +1,4 @@
-package edu.umich.yuangzh.kotlinChatter
+package edu.umich.yanfuguo.contactap.ui.profileList
 
 import android.content.Context
 import android.content.Intent
