@@ -17,8 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.databinding.ActivityMainBinding
 import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
-import edu.umich.yanfuguo.contactap.ui.ContactInfoActivity
-import edu.umich.yanfuguo.contactap.ui.ProfileData.ProfileStore
+import edu.umich.yanfuguo.contactap.model.ProfileStore
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
 class MainActivity : AppCompatActivity() {
@@ -117,6 +116,4 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startShareActivity(view: View?) = startActivity(Intent(this, ShareActivity::class.java))
-
-    fun startContactInfoActivity(view: View?) = startActivity(Intent(this, ContactInfoActivity::class.java))
 }

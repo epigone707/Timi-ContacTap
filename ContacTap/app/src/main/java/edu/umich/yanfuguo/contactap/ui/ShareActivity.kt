@@ -17,7 +17,7 @@ import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.R.color.share_active
 import edu.umich.yanfuguo.contactap.R.color.share_inactive
 import edu.umich.yanfuguo.contactap.toast
-import edu.umich.yanfuguo.contactap.ui.ProfileData.ProfileStore.profiles
+import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
 
 class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var isSharing = false

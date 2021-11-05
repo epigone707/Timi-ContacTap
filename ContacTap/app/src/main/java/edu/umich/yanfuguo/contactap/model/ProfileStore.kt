@@ -1,4 +1,4 @@
-package edu.umich.yanfuguo.contactap.ui.ProfileData;
+package edu.umich.yanfuguo.contactap.model;
 
 import android.content.Context
 import android.content.SharedPreferences

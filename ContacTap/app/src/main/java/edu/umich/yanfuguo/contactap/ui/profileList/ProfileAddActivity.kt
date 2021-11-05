@@ -1,4 +1,4 @@
-package edu.umich.yanfuguo.contactap.ui.ProfileData
+package edu.umich.yanfuguo.contactap.ui.profileList
 
 import android.app.Activity
 import android.content.Intent
@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.ActivityAddProfileBinding
 
-class AddProfileActivity : AppCompatActivity() {
+class ProfileAddActivity : AppCompatActivity() {
     private lateinit var view: ActivityAddProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

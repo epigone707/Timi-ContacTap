@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="edu.umich.yanfuguo.contactap.ui.home.HomeFragment"
+        android:name="edu.umich.yanfuguo.contactap.ui.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
-    <activity
+    <fragment
         android:id="@+id/nav_contact_info"
-        android:name="edu.umich.yanfuguo.contactap.ui.ContactInfoActivity"
+        android:name="edu.umich.yanfuguo.contactap.ui.ContactInfoFragment"
         android:label="@string/menu_contact_info"
-        tools:layout="@layout/activity_contact_info" />
+        tools:layout="@layout/fragment_contact_info" />
 
     <fragment
         android:id="@+id/nav_profiles"
@@ -23,11 +23,11 @@
         android:label="@string/menu_profiles"
         tools:layout="@layout/fragment_profile_list" />
 
-    <activity
+    <fragment
         android:id="@+id/nav_contacts"
-        android:name="edu.umich.yanfuguo.contactap.contactListActivity"
+        android:name="edu.umich.yanfuguo.contactap.ui.ContactListFragment"
         android:label="@string/menu_contacts"
-        tools:layout="@layout/activity_contact_list" />
+        tools:layout="@layout/fragment_contact_list" />
 
     <activity
         android:id="@+id/nav_share"

@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import edu.umich.yanfuguo.contactap.databinding.FragmentProfileListBinding
-import edu.umich.yanfuguo.contactap.ui.ProfileData.AddProfileActivity
-import edu.umich.yanfuguo.contactap.ui.ProfileData.ProfileStore
+import edu.umich.yanfuguo.contactap.model.ProfileStore
 
 class ProfileListFragment : Fragment() {
 
@@ -32,7 +31,7 @@ class ProfileListFragment : Fragment() {
         binding.profileListView.adapter = profileAdapter
 
         binding.fab.setOnClickListener {
-            val intent = Intent(activity, AddProfileActivity::class.java)
+            val intent = Intent(activity, ProfileAddActivity::class.java)
             forAddResult.launch(intent)
         }
 

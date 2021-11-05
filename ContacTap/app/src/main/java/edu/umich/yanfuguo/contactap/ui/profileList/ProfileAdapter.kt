@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import edu.umich.yanfuguo.contactap.ui.ProfileData.Profile
+import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.ProfileItemBinding
-import edu.umich.yanfuguo.contactap.ui.ProfileData.ProfileStore.deleteProfile
+import edu.umich.yanfuguo.contactap.model.ProfileStore.deleteProfile
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
 class ProfileAdapter(context: Context, users: ArrayList<Profile?>) :

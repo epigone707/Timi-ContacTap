@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package edu.umich.yanfuguo.contactap.ui.ProfileData
+package edu.umich.yanfuguo.contactap.model
 
 
 data class Profile(

@@ -32,17 +32,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContacTap">
         <activity
-            android:name=".contactListActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.ContactInfoActivity"
-            android:exported="true"
-            android:label="@string/title_activity_contact_info" />
-        <activity
             android:name=".ui.ShareActivity"
             android:exported="true"
             android:label="Share" />
-        <activity android:name=".ui.ProfileData.AddProfileActivity" />
+        <activity android:name=".ui.profileList.ProfileAddActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

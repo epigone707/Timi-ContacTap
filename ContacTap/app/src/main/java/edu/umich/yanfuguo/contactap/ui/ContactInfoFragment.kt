@@ -2,7 +2,6 @@ package edu.umich.yanfuguo.contactap.ui
 
 import android.Manifest
 import android.app.Activity
-import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,36 +10,43 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import edu.umich.yanfuguo.contactap.R
-import edu.umich.yanfuguo.contactap.databinding.ActivityContactInfoBinding
+import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
 import edu.umich.yanfuguo.contactap.display
 import edu.umich.yanfuguo.contactap.toast
 
-class ContactInfoActivity : AppCompatActivity() {
-
-    private lateinit var contactInfoView: ActivityContactInfoBinding
+class ContactInfoFragment : Fragment() {
+    private var _binding: FragmentContactInfoBinding? = null
 
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private var imageUri: Uri? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        contactInfoView = ActivityContactInfoBinding.inflate(layoutInflater)
-        setContentView(contactInfoView.root)
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
-        val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
-            results.forEach {
-                if (!it.value) {
-                    toast("${it.key} access denied")
-                    finish()
-                }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        _binding = FragmentContactInfoBinding.inflate(inflater, container, false)
+
+        val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { success ->
+            if (!success) {
+                Toast.makeText(activity, "Camera permission denied", Toast.LENGTH_SHORT).show()
             }
-        }.launch(arrayOf(Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE))
+        }
+
+        requestPermission.launch(Manifest.permission.CAMERA);
 
         val cropIntent = initCropIntent()
 
@@ -51,58 +57,59 @@ class ContactInfoActivity : AppCompatActivity() {
                         imageUri?.run {
                             if (!toString().contains("ORIGINAL")) {
                                 // delete uncropped photo taken for posting
-                                contentResolver.delete(this, null, null)
+                                activity?.contentResolver?.delete(this, null, null)
                             }
                         }
                         imageUri = it
-                        imageUri?.let { contactInfoView.previewImage.display(it) }
+                        imageUri?.let { binding.previewImage.display(it) }
                     }
                 } else {
                     Log.d("Crop", result.resultCode.toString())
                 }
             }
 
-        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-            toast("Device has no camera!")
-            return
+        if (!activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)!!) {
+            Toast.makeText(activity, "No camera", Toast.LENGTH_SHORT).show()
         }
 
         val takePictureResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
+                imageUri?.let { binding.previewImage.display(it) }
                 doCrop(cropIntent)
             } else {
                 Log.d("TakePicture", "failed")
             }
         }
 
-        contactInfoView.cameraButton.setOnClickListener{
-            imageUri = mediaStoreAlloc("image/jpeg")
-            takePictureResult.launch(imageUri)
+        activity?.let {
+            binding.cameraButton.setOnClickListener{
+                imageUri = mediaStoreAlloc("image/jpeg")
+                takePictureResult.launch(imageUri)
+            }
         }
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
+        return binding.root
     }
 
     private fun initCropIntent(): Intent? {
         // Is there any published Activity on device to do image cropping?
         val intent = Intent("com.android.camera.action.CROP")
         intent.type = "image/*"
-        val listofCroppers = packageManager.queryIntentActivities(intent, 0)
+        val listofCroppers = activity?.packageManager?.queryIntentActivities(intent, 0)
         // No image cropping Activity published
-        if (listofCroppers.size == 0) {
-            toast("Device does not support image cropping")
+        if (listofCroppers?.size == 0) {
+            Toast.makeText(activity, "Device does not support image cropping", Toast.LENGTH_SHORT).show()
             return null
         }
 
-        intent.component = ComponentName(
-            listofCroppers[0].activityInfo.packageName,
-            listofCroppers[0].activityInfo.name)
+        /*intent.component = listofCroppers.get(0)?.activityInfo?.packageName?.let {
+            listofCroppers?.get(0)?.activityInfo?.name?.let { it1 ->
+                ComponentName(
+                    it,
+                    it1
+                )
+            }
+        }*/
 
         // create a square crop box:
         intent.putExtra("outputX", 500)
@@ -119,7 +126,7 @@ class ContactInfoActivity : AppCompatActivity() {
 
     private fun doCrop(intent: Intent?) {
         intent ?: run {
-            imageUri?.let { contactInfoView.previewImage.display(it) }
+            //imageUri?.let { previewImage.display(it) }
             return
         }
 
@@ -134,7 +141,7 @@ class ContactInfoActivity : AppCompatActivity() {
         values.put(MediaStore.MediaColumns.MIME_TYPE, mediaType)
         values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
 
-        return contentResolver.insert(
+        return activity?.contentResolver?.insert(
             if (mediaType.contains("video"))
                 MediaStore.Video.Media.EXTERNAL_CONTENT_URI
             else
@@ -147,9 +154,16 @@ class ContactInfoActivity : AppCompatActivity() {
         savedInstanceState.putParcelable("imageUri", imageUri)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        imageUri = savedInstanceState.getParcelable<Uri>("imageUri")
-        imageUri?.let { contactInfoView.previewImage.display(it) }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState != null) {
+            imageUri = savedInstanceState.getParcelable<Uri>("imageUri")
+        }
+        //imageUri?.let { view?.findViewById<ImageView>(R.id.previewImage).display(it) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
