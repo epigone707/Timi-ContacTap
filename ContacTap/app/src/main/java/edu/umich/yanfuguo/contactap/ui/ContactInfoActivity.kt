@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -84,14 +85,24 @@ class ContactInfoActivity : AppCompatActivity() {
         updateContent()
         contactInfoView.doneButton.setOnClickListener {
             saveContent()
+            setResult(Activity.RESULT_OK, Intent())
+            finish()
         }
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        // if is welcome
+        if (MyInfoStore.myContact.name == "") {
+            contactInfoView.contactInfoWelcomeMsg.visibility = View.VISIBLE
+        } else {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+        }
     }
 
     private fun updateContent() {
-        contactInfoView.previewImage.setImageURI(Uri.parse(MyInfoStore.myContact.photo))
+        if (MyInfoStore.myContact.photo != null) {
+            imageUri = Uri.parse(MyInfoStore.myContact.photo)
+            contactInfoView.previewImage.setImageURI(imageUri)
+        }
         contactInfoView.contactNameEdit.setText(MyInfoStore.myContact.name)
         contactInfoView.contactPhoneEdit.setText(MyInfoStore.myContact.phone)
         contactInfoView.contactEmailEdit.setText(MyInfoStore.myContact.email)

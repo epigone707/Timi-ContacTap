@@ -1,5 +1,6 @@
 package edu.umich.yanfuguo.contactap
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.nfc.NdefMessage
@@ -7,6 +8,7 @@ import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,6 +21,7 @@ import edu.umich.yanfuguo.contactap.databinding.ActivityMainBinding
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
 import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
 import edu.umich.yanfuguo.contactap.model.ProfileStore
+import edu.umich.yanfuguo.contactap.ui.ContactInfoActivity
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
 class MainActivity : AppCompatActivity() {
@@ -60,6 +63,17 @@ class MainActivity : AppCompatActivity() {
                 Intent(this, this.javaClass)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
             )
+        }
+
+        if (MyInfoStore.myContact.name == "") {
+            val forWelcome = registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_CANCELED) {
+                    finish()
+                }
+            }
+            val intent = Intent(this@MainActivity, ContactInfoActivity::class.java)
+            forWelcome.launch(intent)
         }
     }
 
