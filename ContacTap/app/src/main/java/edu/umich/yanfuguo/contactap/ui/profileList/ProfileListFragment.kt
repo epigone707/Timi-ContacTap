@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import edu.umich.yanfuguo.contactap.databinding.FragmentProfileListBinding
+import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.model.ProfileStore
 
 class ProfileListFragment : Fragment() {
@@ -48,14 +49,13 @@ class ProfileListFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             // There are no request codes
             val data: Intent? = result.data
-            val firstName = data?.getStringExtra("name")
-            val lastName = data?.getStringExtra("description")
+            val name = data?.getStringExtra("name")
+            val description = data?.getStringExtra("description")
 
-            if (lastName != null && firstName != null) {
-                activity?.let { ProfileStore.insertProfile(it, firstName, lastName) }
+            if (name != null && description != null) {
+                activity?.let { ProfileStore.insert(it, Profile(name, description)) }
                 profileAdapter?.notifyDataSetChanged()
             }
         }
     }
-
 }

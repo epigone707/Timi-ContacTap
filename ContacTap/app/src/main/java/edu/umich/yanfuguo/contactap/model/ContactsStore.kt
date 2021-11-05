@@ -1,4 +1,4 @@
-package edu.umich.yanfuguo.contactap.model;
+package edu.umich.yanfuguo.contactap.model
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,18 +8,17 @@ import com.google.gson.JsonSyntaxException
 import org.json.JSONArray
 import org.json.JSONObject
 
-
-object ProfileStore {
-    var profiles = arrayListOf<Profile?>()
+object ContactsStore {
+    val contacts = arrayListOf<Contact?>()
 
     fun init(context: Context) {
         val sharedPref: SharedPreferences =
-            context.getSharedPreferences("profiles_data", Context.MODE_PRIVATE)
-        sharedPref.getString("profiles_data", "[]")?.let {
+            context.getSharedPreferences("contacts_data", Context.MODE_PRIVATE)
+        sharedPref.getString("contacts_data", "[]")?.let {
             try {
-                profiles.clear()
-                Gson().fromJson(it, Array<Profile?>::class.java).forEach{
-                    profile -> profiles.add(profile)
+                contacts.clear()
+                Gson().fromJson(it, Array<Contact?>::class.java).forEach{
+                        contact -> contacts.add(contact)
                 }
             } catch (e: JsonSyntaxException) {
                 Log.e("ProfileStore", "Init failed, get $it")
@@ -29,19 +28,19 @@ object ProfileStore {
 
     fun commit(context: Context){
         val sharedPref: SharedPreferences =
-            context.getSharedPreferences("profiles_data", Context.MODE_PRIVATE)
+            context.getSharedPreferences("contacts_data", Context.MODE_PRIVATE)
         val ed = sharedPref.edit()
-        ed.putString("profiles_data", Gson().toJson(profiles))
+        ed.putString("contacts_data", Gson().toJson(contacts))
         ed.apply()
     }
 
-    fun insert(context: Context, profile: Profile) {
-        profiles.add(profile)
+    fun insert(context: Context, contact: Contact) {
+        contacts.add(contact)
         commit(context)
     }
 
     fun delete(context: Context, pos: Int) {
-        profiles.removeAt(pos)
+        contacts.removeAt(pos)
         commit(context)
     }
 }

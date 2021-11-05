@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.databinding.ActivityMainBinding
+import edu.umich.yanfuguo.contactap.model.MyInfoStore
 import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
 import edu.umich.yanfuguo.contactap.model.ProfileStore
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         ProfileStore.init(this)
+        MyInfoStore.init(this)
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this)
         if (checkNFCEnable()) {

@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.ProfileItemBinding
-import edu.umich.yanfuguo.contactap.model.ProfileStore.deleteProfile
+import edu.umich.yanfuguo.contactap.model.ProfileStore.delete
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
 class ProfileAdapter(context: Context, users: ArrayList<Profile?>) :
@@ -31,7 +31,7 @@ class ProfileAdapter(context: Context, users: ArrayList<Profile?>) :
                 context.startActivity(intent)
             }
             listItemView.deleteButton.setOnClickListener{
-                deleteProfile(context, position)
+                delete(context, position)
                 notifyDataSetChanged()
             }
         }
