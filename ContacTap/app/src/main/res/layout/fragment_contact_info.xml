@@ -73,11 +73,11 @@
 
             <ImageButton
                 android:id="@+id/cameraButton"
-                android:contentDescription="Hi"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="12dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
+                android:contentDescription="Hi"
+                app:layout_constraintEnd_toEndOf="@+id/contact_info_img_container"
                 app:layout_constraintStart_toStartOf="@+id/contact_info_img_container"
                 app:layout_constraintTop_toBottomOf="@+id/previewImage"
                 app:srcCompat="@android:drawable/ic_menu_camera" />
