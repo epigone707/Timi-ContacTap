@@ -35,6 +35,18 @@
             android:name=".ui.ShareActivity"
             android:exported="true"
             android:label="Share" />
+        <activity
+            android:name=".ui.ContactInfoActivity"
+            android:exported="true"
+            android:label="ContactInfo" />
+        <activity
+            android:name=".ui.profileList.ProfileListActivity"
+            android:exported="true"
+            android:label="ProfileList" />
+        <activity
+            android:name=".ui.ContactListActivity"
+            android:exported="true"
+            android:label="ContactList" />
         <activity android:name=".ui.profileList.ProfileAddActivity" />
         <activity
             android:name=".MainActivity"

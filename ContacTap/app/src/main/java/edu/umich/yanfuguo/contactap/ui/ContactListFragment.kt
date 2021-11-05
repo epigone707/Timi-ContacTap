@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import edu.umich.yanfuguo.contactap.databinding.FragmentContactListBinding
-import edu.umich.yanfuguo.contactap.databinding.FragmentProfileListBinding
 import edu.umich.yanfuguo.contactap.model.ProfileStore
 
 class ContactListFragment : Fragment() {
