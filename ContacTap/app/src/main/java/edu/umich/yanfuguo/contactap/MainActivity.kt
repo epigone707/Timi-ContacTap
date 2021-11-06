@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, ContactInfoActivity::class.java)
             forWelcome.launch(intent)
         }
+        onNewIntent(intent)
     }
 
     override fun onResume() {
