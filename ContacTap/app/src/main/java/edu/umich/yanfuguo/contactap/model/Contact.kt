@@ -9,5 +9,7 @@ data class Contact (
     var snap: String = "",
     var twitter: String = "",
     var linkedin: String = "",
-    var other: String = ""
+    var other: String = "",
+    var hobbies: String = "",
+    var otherinfo: String = ""
 )

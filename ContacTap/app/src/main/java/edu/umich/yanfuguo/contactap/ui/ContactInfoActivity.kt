@@ -108,6 +108,8 @@ class ContactInfoActivity : AppCompatActivity() {
         contactInfoView.contactTwitterEdit.setText(MyInfoStore.myContact.twitter)
         contactInfoView.contactLinkedinEdit.setText(MyInfoStore.myContact.linkedin)
         contactInfoView.contactOtherEdit.setText(MyInfoStore.myContact.other)
+        contactInfoView.contactHobbiesEdit.setText(MyInfoStore.myContact.hobbies)
+        contactInfoView.contactOtherinfoEdit.setText(MyInfoStore.myContact.otherinfo)
     }
 
     private fun saveContent() {
@@ -120,6 +122,8 @@ class ContactInfoActivity : AppCompatActivity() {
         contactInfoView.contactTwitterEdit.text?.let{ MyInfoStore.myContact.twitter = it.toString() }
         contactInfoView.contactLinkedinEdit.text?.let{ MyInfoStore.myContact.linkedin = it.toString() }
         contactInfoView.contactOtherEdit.text?.let{ MyInfoStore.myContact.other = it.toString() }
+        contactInfoView.contactHobbiesEdit.text?.let{ MyInfoStore.myContact.hobbies = it.toString() }
+        contactInfoView.contactOtherinfoEdit.text?.let{ MyInfoStore.myContact.otherinfo = it.toString() }
         MyInfoStore.commit(this)
         toast("Contact info saved")
     }
