@@ -149,4 +149,5 @@
     <string name="profile_name_edit_text">Profile Name</string>
     <string name="profile_description_edit_text">Description</string>
     <string name="share">Share</string>
+    <string name="done_button_title">Done</string>
 </resources>

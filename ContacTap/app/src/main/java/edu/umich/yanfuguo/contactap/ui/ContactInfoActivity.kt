@@ -11,11 +11,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
 import edu.umich.yanfuguo.contactap.display
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
@@ -33,7 +35,7 @@ class ContactInfoActivity : AppCompatActivity() {
         contactInfoView = FragmentContactInfoBinding.inflate(layoutInflater)
         setContentView(contactInfoView.root)
 
-        val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
             results.forEach {
                 if (!it.value) {
                     toast("${it.key} access denied")
@@ -83,11 +85,6 @@ class ContactInfoActivity : AppCompatActivity() {
         }
 
         updateContent()
-        contactInfoView.doneButton.setOnClickListener {
-            saveContent()
-            setResult(Activity.RESULT_OK, Intent())
-            finish()
-        }
 
         // if is welcome
         if (MyInfoStore.myContact.name == "") {
@@ -194,5 +191,22 @@ class ContactInfoActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         imageUri = savedInstanceState.getParcelable<Uri>("imageUri")
         imageUri?.let { contactInfoView.previewImage.display(it) }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_contact_info, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.done_button -> {
+                saveContent()
+                setResult(Activity.RESULT_OK, Intent())
+                finish()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

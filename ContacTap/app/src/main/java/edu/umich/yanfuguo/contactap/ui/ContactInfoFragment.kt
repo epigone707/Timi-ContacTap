@@ -93,9 +93,6 @@ class ContactInfoFragment : Fragment() {
         }
 
         updateContent()
-        binding.doneButton.setOnClickListener {
-            saveContent()
-        }
 
         return binding.root
     }
