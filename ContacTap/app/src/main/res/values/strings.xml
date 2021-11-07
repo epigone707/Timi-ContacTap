@@ -37,6 +37,8 @@
     <string name="contact_info_twitter_title">Twitter</string>
     <string name="contact_info_linkedin_title">LinkedIn</string>
     <string name="contact_info_other_title">Other(s)</string>
+    <string name="contact_info_hobbies_title">Hobbies</string>
+    <string name="contact_info_otherinfo_title">Other Information</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"
