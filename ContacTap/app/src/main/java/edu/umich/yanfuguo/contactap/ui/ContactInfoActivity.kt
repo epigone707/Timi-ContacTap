@@ -103,6 +103,7 @@ class ContactInfoActivity : AppCompatActivity() {
         contactInfoView.contactNameEdit.setText(MyInfoStore.myContact.name)
         contactInfoView.contactPersonalPhoneEdit.setText(MyInfoStore.myContact.personal_phone)
         contactInfoView.contactBusinessPhoneEdit.setText(MyInfoStore.myContact.business_phone)
+        contactInfoView.contactOtherPhoneEdit.setText(MyInfoStore.myContact.other_phone)
         contactInfoView.contactPersonalEmailEdit.setText(MyInfoStore.myContact.personal_email)
         contactInfoView.contactBusinessEmailEdit.setText(MyInfoStore.myContact.business_email)
         contactInfoView.contactInstaEdit.setText(MyInfoStore.myContact.insta)
@@ -111,6 +112,7 @@ class ContactInfoActivity : AppCompatActivity() {
         contactInfoView.contactLinkedinEdit.setText(MyInfoStore.myContact.linkedin)
         contactInfoView.contactHobbiesEdit.setText(MyInfoStore.myContact.hobbies)
         contactInfoView.contactOtherinfoEdit.setText(MyInfoStore.myContact.otherinfo)
+        contactInfoView.contactBioEdit.setText(MyInfoStore.myContact.bio)
     }
 
     private fun saveContent() {
@@ -118,6 +120,7 @@ class ContactInfoActivity : AppCompatActivity() {
         contactInfoView.contactNameEdit.text?.let { MyInfoStore.myContact.name = it.toString() }
         contactInfoView.contactPersonalPhoneEdit.text?.let{ MyInfoStore.myContact.personal_phone = it.toString() }
         contactInfoView.contactBusinessPhoneEdit.text?.let{ MyInfoStore.myContact.business_phone = it.toString() }
+        contactInfoView.contactOtherPhoneEdit.text?.let{ MyInfoStore.myContact.other_phone = it.toString() }
         contactInfoView.contactPersonalEmailEdit.text?.let{ MyInfoStore.myContact.personal_email = it.toString() }
         contactInfoView.contactBusinessEmailEdit.text?.let{ MyInfoStore.myContact.business_email = it.toString() }
         contactInfoView.contactInstaEdit.text?.let{ MyInfoStore.myContact.insta = it.toString() }
@@ -126,6 +129,7 @@ class ContactInfoActivity : AppCompatActivity() {
         contactInfoView.contactLinkedinEdit.text?.let{ MyInfoStore.myContact.linkedin = it.toString() }
         contactInfoView.contactHobbiesEdit.text?.let{ MyInfoStore.myContact.hobbies = it.toString() }
         contactInfoView.contactOtherinfoEdit.text?.let{ MyInfoStore.myContact.otherinfo = it.toString() }
+        contactInfoView.contactBioEdit.text?.let{ MyInfoStore.myContact.bio = it.toString() }
         MyInfoStore.commit(this)
         toast("Contact info saved")
     }
