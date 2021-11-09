@@ -30,7 +30,12 @@
     <string name="contact_info_basic_title">Basic Info</string>
     <string name="contact_info_name_title">Name *</string>
     <string name="contact_info_phone_title">Phone # *</string>
-    <string name="contact_info_email_title">Email Address *</string>
+    <string name="contact_info_personal_email_title">Personal Email Address *</string>
+    <string name="contact_info_business_email_title">Business Email Address</string>
+    <string name="contact_info_personal_phone_title">Personal Phone*</string>
+    <string name="contact_info_business_phone_title">Business Phone</string>
+    <string name="contact_info_other_phone_title">Other Phone</string>
+    <string name="contact_info_bio_title">Bio</string>
     <string name="contact_info_social_title">Social Media</string>
     <string name="contact_info_insta_title">Instagram</string>
     <string name="contact_info_snap_title">SnapChat</string>
