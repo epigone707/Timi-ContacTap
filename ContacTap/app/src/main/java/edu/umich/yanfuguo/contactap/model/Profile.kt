@@ -19,6 +19,7 @@ package edu.umich.yanfuguo.contactap.model
 
 data class Profile(
     var name: String,
+    var profileId: String,
     var description: String,
     var includeBitString: String,
 )
