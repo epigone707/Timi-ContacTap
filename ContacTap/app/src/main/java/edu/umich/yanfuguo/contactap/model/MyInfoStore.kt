@@ -49,7 +49,7 @@ object MyInfoStore {
         val getRequest = JsonObjectRequest(uri,
             { response ->
                 val strResp = response.toString()
-                val jsonObj: JSONObject = JSONObject(strResp)
+                val jsonObj = JSONObject(strResp)
                 myInfo.name = jsonObj.getString("name")
                 myInfo.imageUrl = jsonObj.getString("imageUrl")
                 myInfo.personalEmail = jsonObj.getString("personalEmail")
@@ -64,6 +64,7 @@ object MyInfoStore {
                 myInfo.linkedIn = jsonObj.getString("linkedIn")
                 myInfo.hobbies = jsonObj.getString("hobbies")
                 myInfo.other = jsonObj.getString("other")
+                commit(context)
                 completion()
             }, { completion() }
         )
