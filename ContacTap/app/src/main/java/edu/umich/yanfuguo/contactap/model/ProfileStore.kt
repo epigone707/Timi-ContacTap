@@ -96,7 +96,7 @@ object ProfileStore {
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
-            MyInfoStore.serverUrl +"profile/",
+            MyInfoStore.serverUrl +"profile/create/",
             JSONObject(jsonObj),
             {
                 Log.d("createProfile", " get the response!")
@@ -125,45 +125,78 @@ object ProfileStore {
     /**
      * Update a profile based on user's modification on what
      * information they choose to include in the profile.
+     *
      */
-    fun updateProfile(context: Context, profile: Profile) {
+    fun updateProfile(context: Context, profileId: String, includeBitString: String,
+                      profileName: String, description: String) {
         val jsonObject = JSONObject()
 
-        try {
-            jsonObject.put("profileId", profile.profileId)
-            jsonObject.put("includeBitString", profile.includeBitString)
-        } catch (e: JSONException) {
-            // handle exception
-            Log.e("json_error: ", "$e")
-        }
+        val jsonObj = mapOf(
+            "userId" to userId,
+            "profileName" to profileName,
+            "description" to description,
+            "includeBitString" to includeBitString,
+            "profileId" to profileId
+        )
+        val postRequest = JsonObjectRequest(
+            Request.Method.POST,
+            MyInfoStore.serverUrl +"profile/update/",
+            JSONObject(jsonObj),
+            {
+                Log.d("updateProfile", " get the response!")
+                val strResp = it.toString()
+                val entry = JSONObject(strResp)
 
-        val putRequest: JsonObjectRequest =
-            object : JsonObjectRequest(
-                Method.PUT, MyInfoStore.serverUrl +"profile/", jsonObject,
-                Response.Listener { response ->
-                    Log.d("response: ", "$response")
-                },
-                Response.ErrorListener { error ->
-                    Log.e("error: ", "$error")
+                for (i in profiles.indices){
+                    if(profiles[i]?.profileId == profileId){
+                        profiles[i]?.name = profileName
+                        profiles[i]?.includeBitString = includeBitString
+                        profiles[i]?.description = description
+                        break
+                    }
                 }
-            ) {
-                override fun getHeaders(): Map<String, String> {
-                    val headers: MutableMap<String, String> =
-                        HashMap()
-                    headers["Content-Type"] = "application/json"
-                    headers["Accept"] = "application/json"
-                    return headers
-                }
-                override fun getBody(): ByteArray {
-                    Log.i("json", jsonObject.toString())
-                    return jsonObject.toString().toByteArray(charset("UTF-8"))
-                }
+                Log.d("updateProfile", " update local")
+                commit(context)
+            },
+            { error -> Log.e("createProfile", error.localizedMessage ?: "JsonObjectRequest error") }
+        )
 
-            }
+
         if (!MyInfoStore.isThingInitialized) {
             MyInfoStore.queue = Volley.newRequestQueue(context)
         }
-        MyInfoStore.queue.add(putRequest)
+        MyInfoStore.queue.add(postRequest)
+    }
+
+    fun deleteProfile(context: Context, profileId: String) {
+        val jsonObj = mapOf(
+            "userId" to userId,
+            "profileId" to profileId,
+        )
+        val postRequest = JsonObjectRequest(
+            Request.Method.POST,
+            MyInfoStore.serverUrl +"profile/delete/",
+            JSONObject(jsonObj),
+            {
+                Log.d("deleteProfile", " get the response!")
+                val strResp = it.toString()
+                val entry = JSONObject(strResp)
+                for (i in profiles.indices){
+                    if(profiles[i]?.profileId==profileId){
+                        profiles.removeAt(i)
+                        break
+                    }
+                }
+                Log.d("deleteProfile", " deleted!")
+                commit(context)
+            },
+            { error -> Log.e("deleteProfile", error.localizedMessage ?: "JsonObjectRequest error") }
+        )
+
+        if (!MyInfoStore.isThingInitialized) {
+            MyInfoStore.queue = Volley.newRequestQueue(context)
+        }
+        MyInfoStore.queue.add(postRequest)
     }
 
 
