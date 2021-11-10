@@ -17,8 +17,10 @@ import java.lang.String
 object MyInfoStore {
     var myInfo: Contact = Contact()
 
-    private lateinit var queue: RequestQueue
-    private const val serverUrl = "exmaple/"
+    lateinit var queue: RequestQueue
+    val isThingInitialized get() = this::queue.isInitialized
+
+    const val serverUrl = "exmaple/"
 
     var userId = ""
 
