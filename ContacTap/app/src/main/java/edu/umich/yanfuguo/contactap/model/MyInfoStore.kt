@@ -12,12 +12,13 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import com.android.volley.toolbox.Volley.newRequestQueue
+import java.lang.String
 
 object MyInfoStore {
     var myInfo: Contact = Contact()
 
     private lateinit var queue: RequestQueue
-    private const val serverUrl = ""
+    private const val serverUrl = "exmaple/"
 
     var userId = ""
 
@@ -38,12 +39,12 @@ object MyInfoStore {
     }
 
     /**
-     * Create new user's whole set contact info and send it to server.
-     * When the new user create an account and log in for the first time,
-     * the app will send this request.
+     * Get user's contact info from the server.
      */
     fun getMyInfo(context: Context, completion: () -> Unit) {
-        val getRequest = JsonObjectRequest(serverUrl+"contactinfo/",
+        val uri = serverUrl+"contactinfo/?id=$userId"
+
+        val getRequest = JsonObjectRequest(uri,
             { response ->
                 val strResp = response.toString()
                 val jsonObj: JSONObject = JSONObject(strResp)
@@ -71,6 +72,11 @@ object MyInfoStore {
         queue.add(getRequest)
     }
 
+    /**
+     * Create new user's whole set contact info and send it to server.
+     * When the new user create an account and log in for the first time,
+     * the app will send this request.
+     */
     fun postMyInfo(context: Context, contact: Contact) {
         val jsonObj = mapOf(
             "name" to contact.name,
