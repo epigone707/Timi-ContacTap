@@ -101,25 +101,35 @@ class ContactInfoActivity : AppCompatActivity() {
             contactInfoView.previewImage.setImageURI(imageUri)
         }
         contactInfoView.contactNameEdit.setText(MyInfoStore.myContact.name)
-        contactInfoView.contactPhoneEdit.setText(MyInfoStore.myContact.phone)
-        contactInfoView.contactEmailEdit.setText(MyInfoStore.myContact.email)
+        contactInfoView.contactPersonalPhoneEdit.setText(MyInfoStore.myContact.personal_phone)
+        contactInfoView.contactBusinessPhoneEdit.setText(MyInfoStore.myContact.business_phone)
+        contactInfoView.contactOtherPhoneEdit.setText(MyInfoStore.myContact.other_phone)
+        contactInfoView.contactPersonalEmailEdit.setText(MyInfoStore.myContact.personal_email)
+        contactInfoView.contactBusinessEmailEdit.setText(MyInfoStore.myContact.business_email)
         contactInfoView.contactInstaEdit.setText(MyInfoStore.myContact.insta)
         contactInfoView.contactSnapEdit.setText(MyInfoStore.myContact.snap)
         contactInfoView.contactTwitterEdit.setText(MyInfoStore.myContact.twitter)
         contactInfoView.contactLinkedinEdit.setText(MyInfoStore.myContact.linkedin)
-        contactInfoView.contactOtherEdit.setText(MyInfoStore.myContact.other)
+        contactInfoView.contactHobbiesEdit.setText(MyInfoStore.myContact.hobbies)
+        contactInfoView.contactOtherinfoEdit.setText(MyInfoStore.myContact.otherinfo)
+        contactInfoView.contactBioEdit.setText(MyInfoStore.myContact.bio)
     }
 
     private fun saveContent() {
         imageUri?.let { MyInfoStore.myContact.photo = it.toString() }
         contactInfoView.contactNameEdit.text?.let { MyInfoStore.myContact.name = it.toString() }
-        contactInfoView.contactPhoneEdit.text?.let{ MyInfoStore.myContact.phone = it.toString() }
-        contactInfoView.contactEmailEdit.text?.let{ MyInfoStore.myContact.email = it.toString() }
+        contactInfoView.contactPersonalPhoneEdit.text?.let{ MyInfoStore.myContact.personal_phone = it.toString() }
+        contactInfoView.contactBusinessPhoneEdit.text?.let{ MyInfoStore.myContact.business_phone = it.toString() }
+        contactInfoView.contactOtherPhoneEdit.text?.let{ MyInfoStore.myContact.other_phone = it.toString() }
+        contactInfoView.contactPersonalEmailEdit.text?.let{ MyInfoStore.myContact.personal_email = it.toString() }
+        contactInfoView.contactBusinessEmailEdit.text?.let{ MyInfoStore.myContact.business_email = it.toString() }
         contactInfoView.contactInstaEdit.text?.let{ MyInfoStore.myContact.insta = it.toString() }
         contactInfoView.contactSnapEdit.text?.let{ MyInfoStore.myContact.snap = it.toString() }
         contactInfoView.contactTwitterEdit.text?.let{ MyInfoStore.myContact.twitter = it.toString() }
         contactInfoView.contactLinkedinEdit.text?.let{ MyInfoStore.myContact.linkedin = it.toString() }
-        contactInfoView.contactOtherEdit.text?.let{ MyInfoStore.myContact.other = it.toString() }
+        contactInfoView.contactHobbiesEdit.text?.let{ MyInfoStore.myContact.hobbies = it.toString() }
+        contactInfoView.contactOtherinfoEdit.text?.let{ MyInfoStore.myContact.otherinfo = it.toString() }
+        contactInfoView.contactBioEdit.text?.let{ MyInfoStore.myContact.bio = it.toString() }
         MyInfoStore.commit(this)
         toast("Contact info saved")
     }

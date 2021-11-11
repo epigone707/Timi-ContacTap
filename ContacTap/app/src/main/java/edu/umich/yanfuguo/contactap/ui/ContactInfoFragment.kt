@@ -100,25 +100,34 @@ class ContactInfoFragment : Fragment() {
     private fun updateContent() {
         binding.previewImage.setImageURI(Uri.parse(myContact.photo))
         binding.contactNameEdit.setText(myContact.name)
-        binding.contactPhoneEdit.setText(myContact.phone)
-        binding.contactEmailEdit.setText(myContact.email)
+        binding.contactPersonalPhoneEdit.setText(myContact.personal_phone)
+        binding.contactBusinessPhoneEdit.setText(myContact.business_phone)
+        binding.contactOtherPhoneEdit.setText(myContact.other_phone)
+        binding.contactPersonalEmailEdit.setText(myContact.personal_email)
+        binding.contactBusinessEmailEdit.setText(myContact.business_email)
         binding.contactInstaEdit.setText(myContact.insta)
         binding.contactSnapEdit.setText(myContact.snap)
         binding.contactTwitterEdit.setText(myContact.twitter)
         binding.contactLinkedinEdit.setText(myContact.linkedin)
-        binding.contactOtherEdit.setText(myContact.other)
+        binding.contactHobbiesEdit.setText(myContact.hobbies)
+        binding.contactBioEdit.setText(myContact.bio)
     }
 
     private fun saveContent() {
         imageUri?.let { myContact.photo = it.toString() }
         binding.contactNameEdit.text?.let { myContact.name = it.toString() }
-        binding.contactPhoneEdit.text?.let{ myContact.phone = it.toString() }
-        binding.contactEmailEdit.text?.let{ myContact.email = it.toString() }
+        binding.contactPersonalPhoneEdit.text?.let{ myContact.personal_phone = it.toString() }
+        binding.contactBusinessPhoneEdit.text?.let{ myContact.business_phone = it.toString() }
+        binding.contactOtherPhoneEdit.text?.let{ myContact.other_phone = it.toString() }
+        binding.contactPersonalEmailEdit.text?.let{ myContact.personal_email = it.toString() }
+        binding.contactBusinessEmailEdit.text?.let{ myContact.business_email = it.toString() }
         binding.contactInstaEdit.text?.let{ myContact.insta = it.toString() }
         binding.contactSnapEdit.text?.let{ myContact.snap = it.toString() }
         binding.contactTwitterEdit.text?.let{ myContact.twitter = it.toString() }
         binding.contactLinkedinEdit.text?.let{ myContact.linkedin = it.toString() }
-        binding.contactOtherEdit.text?.let{ myContact.other = it.toString() }
+        binding.contactHobbiesEdit.text?.let{ myContact.hobbies = it.toString() }
+        binding.contactOtherinfoEdit.text?.let{ myContact.otherinfo = it.toString() }
+        binding.contactBioEdit.text?.let{ myContact.bio = it.toString() }
         context?.let {
             MyInfoStore.commit(it)
             Toast.makeText(activity, "Contact info saved", Toast.LENGTH_SHORT).show()

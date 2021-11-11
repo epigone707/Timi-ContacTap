@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import com.google.gson.Gson
 import edu.umich.yanfuguo.contactap.nfc.KHostApduService
 import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
 import edu.umich.yanfuguo.contactap.R
@@ -32,6 +33,11 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         shareView = ActivityShareBinding.inflate(layoutInflater)
         setContentView(shareView.root)
 
+        if (profiles.size == 0) {
+            toast("Please create a profile to share")
+            finish()
+        }
+
         // add back (left arrow) button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -51,16 +57,16 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun initNFCFunction(): Boolean {
         return if (checkNFCEnable() && packageManager.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
             toggleService(true)
-            true
         } else {
             showTurnOnNfcDialog()
             false
         }
     }
 
-    private fun toggleService(enable: Boolean) {
+    private fun toggleService(enable: Boolean): Boolean {
         val intent = Intent(this@ShareActivity, KHostApduService::class.java)
-        intent.putExtra("ndefMessage", "Name: Place Holder, Phone: 1234567890, Email:1234567890@umich.edu")
+        if (selectedId >= profiles.size) return false
+        intent.putExtra("ndefMessage", Gson().toJson(profiles[selectedId]))
         if(enable) {
             packageManager.setComponentEnabledSetting(
                 ComponentName(this@ShareActivity, KHostApduService::class.java),
@@ -74,6 +80,7 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 PackageManager.DONT_KILL_APP)
             stopService(intent)
         }
+        return enable
     }
 
     private fun checkNFCEnable(): Boolean {
