@@ -1,18 +1,19 @@
 package edu.umich.yanfuguo.contactap.model
 
 data class Contact (
-    var photo: String? = null,
+
     var name: String = "",
-    var personal_email: String = "",
-    var business_email: String = "",
-    var personal_phone: String = "",
-    var business_phone: String = "",
-    var other_phone: String = "",
+    var imageUrl: String? = null,
+    var personalEmail: String = "",
+    var businessEmail: String = "",
+    var personalPhone: String = "",
+    var businessPhone: String = "",
+    var otherPhone: String = "",
     var bio: String = "",
-    var insta: String = "",
-    var snap: String = "",
+    var instagram: String = "",
+    var snapchat: String = "",
     var twitter: String = "",
-    var linkedin: String = "",
+    var linkedIn: String = "",
     var hobbies: String = "",
-    var otherinfo: String = ""
+    var other: String = "",
 )
