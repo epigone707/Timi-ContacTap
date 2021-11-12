@@ -147,4 +147,7 @@
     <string name="add_profile">Add Profile</string>
     <string name="first_name_edit_text">First Name</string>
     <string name="last_name_edit_text">Last Name</string>
+
+    <!-- ProfileList Strings -->
+    <string name="contactName">Your Contact</string>
 </resources>

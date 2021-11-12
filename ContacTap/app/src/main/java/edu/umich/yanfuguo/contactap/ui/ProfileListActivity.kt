@@ -32,7 +32,7 @@ class ProfileListActivity: AppCompatActivity() {
         val profileAdapter = ProfileAdapter { profile -> adapterOnClick(profile) }
         //val concatAdapter = ConcatAdapter(headerAdapter, profileAdapter)
 
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.profile_recycler_view)
         recyclerView.adapter = profileAdapter
 
         profilesListViewModel.profileLiveData.observe(this, {
@@ -41,7 +41,7 @@ class ProfileListActivity: AppCompatActivity() {
             }
         })
 
-        val fab: View = findViewById(R.id.fab)
+        val fab: View = findViewById(R.id.profile_fab)
         fab.setOnClickListener {
             fabOnClick()
         }

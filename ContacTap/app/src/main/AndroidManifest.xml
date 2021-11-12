@@ -32,7 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContacTap">
         <activity
-            android:name=".contactListActivity"
+            android:name=".ui.ContactListActivity"
             android:exported="true" />
         <activity
             android:name=".ui.ContactInfoActivity"
