@@ -146,10 +146,9 @@
     <string name="contact_info_title_2_Welcome_to_ContacTap">Please enter your basic information to be shared to your new friends</string>
 
     <!-- ProfileList Strings -->
-    <string name="profilePic">Your Profile</string>
-    <string name="profileTitle">Profile</string>
-    <string name="editProfile">Edit</string>
-    <string name="shareFromProfile">Share</string>
+    <string name="profile_pic">Your Profile</string>
+    <string name="profile_title">Profile</string>
+    <string name="share_from_profile">Share</string>
     <string name="fab_content_description">fab</string>
     <string name="done_button_text">Done</string>
     <string name="add_profile">Add Profile</string>
@@ -161,5 +160,5 @@
     <string name="last_name_edit_text">Last Name</string>
 
     <!-- ProfileList Strings -->
-    <string name="contactName">Your Contact</string>
+    <string name="contact_name">Your Contact</string>
 </resources>

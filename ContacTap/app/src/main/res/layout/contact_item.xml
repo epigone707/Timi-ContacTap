@@ -53,10 +53,10 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/contactName"
+                            android:id="@+id/contact_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/contactName"
+                            android:text="@string/contact_name"
                             android:textAppearance="?attr/textAppearanceHeadline6" />
 
                     </LinearLayout>
