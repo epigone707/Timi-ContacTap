@@ -157,4 +157,9 @@
     <string name="profile_description_edit_text">Description</string>
     <string name="share">Share</string>
     <string name="done_button_title">Done</string>
+    <string name="first_name_edit_text">First Name</string>
+    <string name="last_name_edit_text">Last Name</string>
+
+    <!-- ProfileList Strings -->
+    <string name="contactName">Your Contact</string>
 </resources>
