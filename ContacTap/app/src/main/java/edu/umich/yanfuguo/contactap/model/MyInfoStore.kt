@@ -149,4 +149,7 @@ object MyInfoStore {
         commit(context)
     }
 
+    fun getMaskedInfo(profile: Profile?) : Contact {
+        return myInfo
+    }
 }

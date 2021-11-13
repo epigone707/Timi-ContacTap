@@ -1,13 +1,9 @@
 package edu.umich.yanfuguo.contactap.ui.contactList
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.databinding.FragmentContactListBinding
 import edu.umich.yanfuguo.contactap.model.ConnectionStore.connections
-import edu.umich.yanfuguo.contactap.model.ProfileStore
-import edu.umich.yanfuguo.contactap.ui.profileList.ProfileAdapter
-import edu.umich.yanfuguo.contactap.ui.profileList.ProfileAddActivity
 
 class ContactListActivity : AppCompatActivity() {
     lateinit var contactListView: FragmentContactListBinding
@@ -30,5 +26,10 @@ class ContactListActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        contectAdapter.notifyDataSetChanged()
     }
 }

@@ -6,19 +6,20 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.nfc.NfcAdapter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
-import edu.umich.yanfuguo.contactap.nfc.KHostApduService
-import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.R.color.share_active
 import edu.umich.yanfuguo.contactap.R.color.share_inactive
-import edu.umich.yanfuguo.contactap.toast
+import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedInfo
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
+import edu.umich.yanfuguo.contactap.nfc.KHostApduService
+import edu.umich.yanfuguo.contactap.toast
 
 class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var isSharing = false
@@ -66,7 +67,8 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun toggleService(enable: Boolean): Boolean {
         val intent = Intent(this@ShareActivity, KHostApduService::class.java)
         if (selectedId >= profiles.size) return false
-        intent.putExtra("ndefMessage", Gson().toJson(profiles[selectedId]))
+        val info = getMaskedInfo(profiles[selectedId])
+        intent.putExtra("ndefMessage", Gson().toJson(info))
         if(enable) {
             packageManager.setComponentEnabledSetting(
                 ComponentName(this@ShareActivity, KHostApduService::class.java),

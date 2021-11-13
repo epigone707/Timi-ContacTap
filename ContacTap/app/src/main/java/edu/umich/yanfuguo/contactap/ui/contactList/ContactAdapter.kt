@@ -1,18 +1,14 @@
 package edu.umich.yanfuguo.contactap.ui.contactList
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.ContactItemBinding
-import edu.umich.yanfuguo.contactap.databinding.ProfileItemBinding
+import edu.umich.yanfuguo.contactap.model.ConnectionStore.delete
 import edu.umich.yanfuguo.contactap.model.Contact
-import edu.umich.yanfuguo.contactap.model.ProfileStore.delete
-import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
 class ContactAdapter(context: Context, users: ArrayList<Contact?>) :
     ArrayAdapter<Contact?>(context, 0, users) {
