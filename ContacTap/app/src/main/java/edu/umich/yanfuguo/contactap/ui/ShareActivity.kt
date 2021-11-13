@@ -20,6 +20,8 @@ import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedInfo
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
 import edu.umich.yanfuguo.contactap.nfc.KHostApduService
 import edu.umich.yanfuguo.contactap.toast
+import org.json.JSONException
+import org.json.JSONObject
 
 class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var isSharing = false
@@ -67,8 +69,12 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun toggleService(enable: Boolean): Boolean {
         val intent = Intent(this@ShareActivity, KHostApduService::class.java)
         if (selectedId >= profiles.size) return false
+
+        // gen message
         val info = getMaskedInfo(profiles[selectedId])
         intent.putExtra("ndefMessage", Gson().toJson(info))
+
+        // toggle service
         if(enable) {
             packageManager.setComponentEnabledSetting(
                 ComponentName(this@ShareActivity, KHostApduService::class.java),
@@ -125,6 +131,17 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         selectedId = pos
         shareView.headerTitle.text = profiles[selectedId]?.name
         shareView.headerSubtitle.text = profiles[selectedId]?.description
+
+        // gen preview
+        val info = getMaskedInfo(profiles[selectedId])
+        val obj = try { JSONObject(Gson().toJson(info)) } catch (e: JSONException) { JSONObject() }
+        var preview = ""
+        obj.keys().forEach { k->
+            try {
+                preview += "$k: ${obj.getString(k)}\n"
+            } catch (e: JSONException) {}
+        }
+        shareView.previewText.text = preview.removeSuffix("\n")
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {
