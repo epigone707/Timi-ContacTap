@@ -2,17 +2,16 @@ package edu.umich.yanfuguo.contactap.model
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.Gson
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
 import com.android.volley.toolbox.Volley.newRequestQueue
-import java.lang.String
+import com.google.gson.Gson
+import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
+import org.json.JSONObject
 
 object MyInfoStore {
     var myInfo: Contact = Contact()
@@ -109,5 +108,45 @@ object MyInfoStore {
         this.queue.add(postRequest)
     }
 
+
+    fun updateContent(contactInfoView: FragmentContactInfoBinding) : Uri? {
+        val imageUri = if (myInfo.imageUrl != null) {
+            val uri = Uri.parse(myInfo.imageUrl)
+            contactInfoView.previewImage.setImageURI(uri)
+            uri
+        } else {null}
+        contactInfoView.contactNameEdit.setText(myInfo.name)
+        contactInfoView.contactPersonalPhoneEdit.setText(myInfo.personalPhone)
+        contactInfoView.contactBusinessPhoneEdit.setText(myInfo.businessPhone)
+        contactInfoView.contactOtherPhoneEdit.setText(myInfo.otherPhone)
+        contactInfoView.contactPersonalEmailEdit.setText(myInfo.personalEmail)
+        contactInfoView.contactBusinessEmailEdit.setText(myInfo.businessEmail)
+        contactInfoView.contactInstaEdit.setText(myInfo.instagram)
+        contactInfoView.contactSnapEdit.setText(myInfo.snapchat)
+        contactInfoView.contactTwitterEdit.setText(myInfo.twitter)
+        contactInfoView.contactLinkedinEdit.setText(myInfo.linkedIn)
+        contactInfoView.contactHobbiesEdit.setText(myInfo.hobbies)
+        contactInfoView.contactOtherinfoEdit.setText(myInfo.other)
+        contactInfoView.contactBioEdit.setText(myInfo.bio)
+        return imageUri
+    }
+
+    fun saveContent(context: Context, contactInfoView: FragmentContactInfoBinding, imageUri: Uri?) {
+        imageUri?.let { myInfo.imageUrl = it.toString() }
+        contactInfoView.contactNameEdit.text?.let { myInfo.name = it.toString() }
+        contactInfoView.contactPersonalPhoneEdit.text?.let{ myInfo.personalPhone = it.toString() }
+        contactInfoView.contactBusinessPhoneEdit.text?.let{ myInfo.businessPhone = it.toString() }
+        contactInfoView.contactOtherPhoneEdit.text?.let{ myInfo.otherPhone = it.toString() }
+        contactInfoView.contactPersonalEmailEdit.text?.let{ myInfo.personalEmail = it.toString() }
+        contactInfoView.contactBusinessEmailEdit.text?.let{ myInfo.businessEmail = it.toString() }
+        contactInfoView.contactInstaEdit.text?.let{ myInfo.instagram = it.toString() }
+        contactInfoView.contactSnapEdit.text?.let{ myInfo.snapchat = it.toString() }
+        contactInfoView.contactTwitterEdit.text?.let{ myInfo.twitter = it.toString() }
+        contactInfoView.contactLinkedinEdit.text?.let{ myInfo.linkedIn = it.toString() }
+        contactInfoView.contactHobbiesEdit.text?.let{ myInfo.hobbies = it.toString() }
+        contactInfoView.contactOtherinfoEdit.text?.let{ myInfo.other = it.toString() }
+        contactInfoView.contactBioEdit.text?.let{ myInfo.bio = it.toString() }
+        commit(context)
+    }
 
 }

@@ -53,7 +53,7 @@ class ProfileListFragment : Fragment() {
             val description = data?.getStringExtra("description")
 
             if (name != null && description != null) {
-                activity?.let { ProfileStore.insert(it, Profile(name, description)) }
+                activity?.let { ProfileStore.insert(it, Profile(name, "", description, "")) }
                 profileAdapter?.notifyDataSetChanged()
             }
         }

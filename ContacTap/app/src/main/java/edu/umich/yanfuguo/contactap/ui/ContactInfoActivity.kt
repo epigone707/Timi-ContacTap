@@ -21,6 +21,7 @@ import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
 import edu.umich.yanfuguo.contactap.display
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.myInfo
 import edu.umich.yanfuguo.contactap.toast
 
 class ContactInfoActivity : AppCompatActivity() {
@@ -84,54 +85,15 @@ class ContactInfoActivity : AppCompatActivity() {
             takePictureResult.launch(imageUri)
         }
 
-        updateContent()
+        imageUri = MyInfoStore.updateContent(contactInfoView)
 
         // if is welcome
-        if (MyInfoStore.myContact.name == "") {
+        if (myInfo.name == "") {
             contactInfoView.contactInfoWelcomeMsg.visibility = View.VISIBLE
         } else {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(true)
         }
-    }
-
-    private fun updateContent() {
-        if (MyInfoStore.myContact.photo != null) {
-            imageUri = Uri.parse(MyInfoStore.myContact.photo)
-            contactInfoView.previewImage.setImageURI(imageUri)
-        }
-        contactInfoView.contactNameEdit.setText(MyInfoStore.myContact.name)
-        contactInfoView.contactPersonalPhoneEdit.setText(MyInfoStore.myContact.personal_phone)
-        contactInfoView.contactBusinessPhoneEdit.setText(MyInfoStore.myContact.business_phone)
-        contactInfoView.contactOtherPhoneEdit.setText(MyInfoStore.myContact.other_phone)
-        contactInfoView.contactPersonalEmailEdit.setText(MyInfoStore.myContact.personal_email)
-        contactInfoView.contactBusinessEmailEdit.setText(MyInfoStore.myContact.business_email)
-        contactInfoView.contactInstaEdit.setText(MyInfoStore.myContact.insta)
-        contactInfoView.contactSnapEdit.setText(MyInfoStore.myContact.snap)
-        contactInfoView.contactTwitterEdit.setText(MyInfoStore.myContact.twitter)
-        contactInfoView.contactLinkedinEdit.setText(MyInfoStore.myContact.linkedin)
-        contactInfoView.contactHobbiesEdit.setText(MyInfoStore.myContact.hobbies)
-        contactInfoView.contactOtherinfoEdit.setText(MyInfoStore.myContact.otherinfo)
-        contactInfoView.contactBioEdit.setText(MyInfoStore.myContact.bio)
-    }
-
-    private fun saveContent() {
-        imageUri?.let { MyInfoStore.myContact.photo = it.toString() }
-        contactInfoView.contactNameEdit.text?.let { MyInfoStore.myContact.name = it.toString() }
-        contactInfoView.contactPersonalPhoneEdit.text?.let{ MyInfoStore.myContact.personal_phone = it.toString() }
-        contactInfoView.contactBusinessPhoneEdit.text?.let{ MyInfoStore.myContact.business_phone = it.toString() }
-        contactInfoView.contactOtherPhoneEdit.text?.let{ MyInfoStore.myContact.other_phone = it.toString() }
-        contactInfoView.contactPersonalEmailEdit.text?.let{ MyInfoStore.myContact.personal_email = it.toString() }
-        contactInfoView.contactBusinessEmailEdit.text?.let{ MyInfoStore.myContact.business_email = it.toString() }
-        contactInfoView.contactInstaEdit.text?.let{ MyInfoStore.myContact.insta = it.toString() }
-        contactInfoView.contactSnapEdit.text?.let{ MyInfoStore.myContact.snap = it.toString() }
-        contactInfoView.contactTwitterEdit.text?.let{ MyInfoStore.myContact.twitter = it.toString() }
-        contactInfoView.contactLinkedinEdit.text?.let{ MyInfoStore.myContact.linkedin = it.toString() }
-        contactInfoView.contactHobbiesEdit.text?.let{ MyInfoStore.myContact.hobbies = it.toString() }
-        contactInfoView.contactOtherinfoEdit.text?.let{ MyInfoStore.myContact.otherinfo = it.toString() }
-        contactInfoView.contactBioEdit.text?.let{ MyInfoStore.myContact.bio = it.toString() }
-        MyInfoStore.commit(this)
-        toast("Contact info saved")
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -211,7 +173,7 @@ class ContactInfoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.done_button -> {
-                saveContent()
+                MyInfoStore.saveContent(this, contactInfoView, imageUri)
                 setResult(Activity.RESULT_OK, Intent())
                 finish()
                 return true

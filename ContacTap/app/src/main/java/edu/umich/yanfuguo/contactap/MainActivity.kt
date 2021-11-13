@@ -9,18 +9,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
 import edu.umich.yanfuguo.contactap.databinding.ActivityMainBinding
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
-import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
 import edu.umich.yanfuguo.contactap.model.ProfileStore
+import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
 import edu.umich.yanfuguo.contactap.ui.ContactInfoActivity
 import edu.umich.yanfuguo.contactap.ui.ShareActivity
 
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        if (MyInfoStore.myContact.name == "") {
+        if (MyInfoStore.myInfo.name == "") {
             val forWelcome = registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_CANCELED) {
