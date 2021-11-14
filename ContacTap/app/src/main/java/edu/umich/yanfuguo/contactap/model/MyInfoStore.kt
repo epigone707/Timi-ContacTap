@@ -150,6 +150,26 @@ object MyInfoStore {
     }
 
     fun getMaskedInfo(profile: Profile?) : Contact {
-        return myInfo
+        val contact = myInfo.copy()
+        profile?.includeBitString?.forEachIndexed { i, inc ->
+            if (inc == '0')
+                when (i) {
+                    0 -> contact.name = ""
+                    1 -> contact.imageUrl = ""
+                    2 -> contact.personalEmail = ""
+                    3 -> contact.businessEmail = ""
+                    4 -> contact.personalPhone = ""
+                    5 -> contact.businessPhone = ""
+                    6 -> contact.otherPhone = ""
+                    7 -> contact.bio = ""
+                    8 -> contact.instagram = ""
+                    9 -> contact.snapchat = ""
+                    10 -> contact.twitter = ""
+                    11 -> contact.linkedIn = ""
+                    12 -> contact.hobbies = ""
+                    13 -> contact.other = ""
+                }
+        }
+        return contact
     }
 }
