@@ -138,7 +138,8 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         var preview = ""
         obj.keys().forEach { k->
             try {
-                preview += "$k: ${obj.getString(k)}\n"
+                if (obj.getString(k).isNotEmpty())
+                    preview += "$k: ${obj.getString(k)}\n"
             } catch (e: JSONException) {}
         }
         shareView.previewText.text = preview.removeSuffix("\n")
