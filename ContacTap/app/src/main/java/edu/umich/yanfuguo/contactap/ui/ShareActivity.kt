@@ -115,11 +115,9 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         mTurnNfcDialog.show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (isSharing && mNfcAdapter!!.isEnabled) {
-            initNFCFunction()
-        }
+    override fun onPause() {
+        if (isSharing) toggleShare(null)
+        super.onPause()
     }
 
     override fun onSupportNavigateUp(): Boolean {

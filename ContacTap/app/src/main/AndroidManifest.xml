@@ -46,19 +46,14 @@
         <activity
             android:name=".ui.contactList.ContactListActivity"
             android:exported="true"
-            android:label="ContactList" />
-        <activity android:name=".ui.profileList.ProfileAddActivity" />
-        <activity
-            android:name=".ReceiveActivity"
-            android:exported="true">
+            android:label="ContactList">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.profileList.ProfileAddActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

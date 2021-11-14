@@ -2,10 +2,11 @@ package edu.umich.yanfuguo.contactap.ui.contactList
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import edu.umich.yanfuguo.contactap.ReceiveActivity
 import edu.umich.yanfuguo.contactap.databinding.FragmentContactListBinding
 import edu.umich.yanfuguo.contactap.model.ConnectionStore.connections
 
-class ContactListActivity : AppCompatActivity() {
+class ContactListActivity : ReceiveActivity() {
     lateinit var contactListView: FragmentContactListBinding
     lateinit var contectAdapter: ContactAdapter
 
