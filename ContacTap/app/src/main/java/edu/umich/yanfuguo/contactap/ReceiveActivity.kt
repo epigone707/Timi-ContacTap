@@ -12,6 +12,7 @@ import edu.umich.yanfuguo.contactap.model.ConnectionStore
 import edu.umich.yanfuguo.contactap.model.ConnectionStore.insert
 import edu.umich.yanfuguo.contactap.model.Contact
 import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
+import edu.umich.yanfuguo.contactap.ui.contactList.ContactListActivity
 
 class ReceiveActivity : AppCompatActivity() {
     lateinit var binding: ActivityReceiveBinding
@@ -40,6 +41,7 @@ class ReceiveActivity : AppCompatActivity() {
                 parserNDEFMessage(messages)
             }
         }
+        finish()
     }
 
     override fun onResume() {
@@ -50,6 +52,11 @@ class ReceiveActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         mNfcAdapter?.disableForegroundDispatch(this)
+    }
+
+    override fun onDestroy() {
+        startActivity(Intent(this, ContactListActivity::class.java))
+        super.onDestroy()
     }
 
     private fun parserNDEFMessage(messages: List<NdefMessage>) {
