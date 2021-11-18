@@ -1,4 +1,4 @@
-package edu.umich.yanfuguo.contactap.ui
+package edu.umich.yanfuguo.contactap.ui.contactList
 
 import android.app.Activity
 import android.content.Intent

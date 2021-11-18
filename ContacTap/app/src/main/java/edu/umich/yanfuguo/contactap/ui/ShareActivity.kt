@@ -6,19 +6,22 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.nfc.NfcAdapter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
-import edu.umich.yanfuguo.contactap.nfc.KHostApduService
-import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.R.color.share_active
 import edu.umich.yanfuguo.contactap.R.color.share_inactive
-import edu.umich.yanfuguo.contactap.toast
+import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedInfo
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
+import edu.umich.yanfuguo.contactap.nfc.KHostApduService
+import edu.umich.yanfuguo.contactap.toast
+import org.json.JSONException
+import org.json.JSONObject
 
 class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var isSharing = false
@@ -66,7 +69,12 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun toggleService(enable: Boolean): Boolean {
         val intent = Intent(this@ShareActivity, KHostApduService::class.java)
         if (selectedId >= profiles.size) return false
-        intent.putExtra("ndefMessage", Gson().toJson(profiles[selectedId]))
+
+        // gen message
+        val info = getMaskedInfo(profiles[selectedId])
+        intent.putExtra("ndefMessage", Gson().toJson(info))
+
+        // toggle service
         if(enable) {
             packageManager.setComponentEnabledSetting(
                 ComponentName(this@ShareActivity, KHostApduService::class.java),
@@ -107,11 +115,9 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         mTurnNfcDialog.show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (isSharing && mNfcAdapter!!.isEnabled) {
-            initNFCFunction()
-        }
+    override fun onPause() {
+        if (isSharing) toggleShare(null)
+        super.onPause()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -123,6 +129,18 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         selectedId = pos
         shareView.headerTitle.text = profiles[selectedId]?.name
         shareView.headerSubtitle.text = profiles[selectedId]?.description
+
+        // gen preview
+        val info = getMaskedInfo(profiles[selectedId])
+        val obj = try { JSONObject(Gson().toJson(info)) } catch (e: JSONException) { JSONObject() }
+        var preview = ""
+        obj.keys().forEach { k->
+            try {
+                if (obj.getString(k).isNotEmpty())
+                    preview += "$k: ${obj.getString(k)}\n"
+            } catch (e: JSONException) {}
+        }
+        shareView.previewText.text = preview.removeSuffix("\n")
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {

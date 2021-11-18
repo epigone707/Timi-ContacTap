@@ -44,9 +44,15 @@
             android:exported="true"
             android:label="ProfileList" />
         <activity
-            android:name=".ui.ContactListActivity"
+            android:name=".ui.contactList.ContactListActivity"
             android:exported="true"
-            android:label="ContactList" />
+            android:label="ContactList">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.profileList.ProfileAddActivity" />
         <activity
             android:name=".MainActivity"
@@ -58,13 +64,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 

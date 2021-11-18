@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context=".ui.contactList.ContactListActivity">
 
     <LinearLayout
-        android:id="@+id/linear_layout"
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -34,13 +35,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
+                    android:paddingLeft="16dp"
                     android:paddingTop="16dp">
 
                     <ImageView
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:contentDescription="@string/profile_pic"
+                        android:contentDescription="Your Contact"
                         android:scaleType="centerCrop"
                         app:srcCompat="@drawable/ic_baseline_person_24" />
 
@@ -52,59 +53,32 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/profile_title"
+                            android:id="@+id/contact_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/profile_title"
+                            android:text="@string/contact_name"
                             android:textAppearance="?attr/textAppearanceHeadline6" />
 
-                        <TextView
-                            android:id="@+id/profile_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
 
                 </LinearLayout>
                 <!-- Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="0dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/share_button"
+                        android:id="@+id/deleteButton"
                         style="?attr/borderlessButtonStyle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/share_from_profile" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/edit_button"
-                        style="?attr/borderlessButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minWidth="48dp"
-                        android:paddingEnd="10dp"
-                        app:icon="@drawable/ic_baseline_edit_24" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/delete_button"
-                        style="?attr/borderlessButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minWidth="48dp"
-                        app:icon="@drawable/ic_baseline_delete_24" />
-                </LinearLayout>
+                        android:layout_marginStart="340dp"
+                        android:paddingRight="0dp"
+                        app:icon="@drawable/ic_baseline_delete_24"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </RelativeLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

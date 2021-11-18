@@ -48,7 +48,7 @@ class ProfileListActivity: AppCompatActivity() {
             val description = data?.getStringExtra("description")
 
             if (name != null && description != null) {
-                insert(this, Profile(name, description))
+                insert(this, Profile(name, "", description, ""))
                 profileAdapter.notifyDataSetChanged()
             }
         }
