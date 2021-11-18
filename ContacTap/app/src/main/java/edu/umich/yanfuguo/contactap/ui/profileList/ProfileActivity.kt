@@ -7,36 +7,61 @@ import android.widget.CheckBox
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.ActivityProfileBinding
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
+import edu.umich.yanfuguo.contactap.model.Profile
+import edu.umich.yanfuguo.contactap.model.ProfileStore
+import edu.umich.yanfuguo.contactap.toast
+
 
 class ProfileActivity : AppCompatActivity() {
-    private lateinit var view: ActivityProfileBinding
+    private lateinit var profileView: ActivityProfileBinding
+    private var current_profile: Profile? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
-        view.checkboxName.text = MyInfoStore.myInfo.name
-        view.checkboxBEmail.text = MyInfoStore.myInfo.businessEmail
-        view.checkboxPEmail.text = MyInfoStore.myInfo.personalEmail
-        view.checkboxBPhone.text = MyInfoStore.myInfo.businessPhone
-        view.checkboxPPhone.text = MyInfoStore.myInfo.personalPhone
-        view.checkboxOPhone.text = MyInfoStore.myInfo.otherPhone
-        view.checkboxBio.text = MyInfoStore.myInfo.bio
+        profileView = ActivityProfileBinding.inflate(layoutInflater)
+        setContentView(profileView.root)
+
+        val position = intent.getIntExtra("position",0)
+        current_profile = ProfileStore.profiles[position]
+
+        // basic
+        profileView.checkboxName.text = MyInfoStore.myInfo.name
+        profileView.checkboxBEmail.text = MyInfoStore.myInfo.businessEmail
+        profileView.checkboxPEmail.text = MyInfoStore.myInfo.personalEmail
+        profileView.checkboxBPhone.text = MyInfoStore.myInfo.businessPhone
+        profileView.checkboxPPhone.text = MyInfoStore.myInfo.personalPhone
+        profileView.checkboxOPhone.text = MyInfoStore.myInfo.otherPhone
+        profileView.checkboxBio.text = MyInfoStore.myInfo.bio
+        // social media
+        profileView.checkboxInsta.text = MyInfoStore.myInfo.instagram
+        profileView.checkboxSnap.text = MyInfoStore.myInfo.snapchat
+        profileView.checkboxTwitter.text = MyInfoStore.myInfo.twitter
+        profileView.checkboxLinkedin.text = MyInfoStore.myInfo.linkedIn
+        // hobbies & other
+        profileView.checkboxHobbies.text = MyInfoStore.myInfo.hobbies
+        profileView.checkboxOtherinfo.text = MyInfoStore.myInfo.other
+
+
+
+    }
+    fun checkHelper(){
 
     }
 
     fun onCheckboxClicked(view: View) {
+
         if (view is CheckBox) {
             val checked: Boolean = view.isChecked
 
             when (view.id) {
-                R.id.checkbox_meat -> {
+                R.id.checkbox_name -> {
                     if (checked) {
                         // Put some meat on the sandwich
                     } else {
                         // Remove the meat
                     }
                 }
-                R.id.checkbox_cheese -> {
+                R.id.checkbox_p_email -> {
                     if (checked) {
                         // Cheese me
                     } else {

@@ -2,6 +2,7 @@ package edu.umich.yanfuguo.contactap.ui.profileList
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,7 @@ class ProfileAdapter(context: Context, users: ArrayList<Profile?>) :
             }
             listItemView.editButton.setOnClickListener{
                 val intent = Intent(context, ProfileActivity::class.java)
+                Log.d("ProfileAdapter", "start ProfileActivity with$position")
                 intent.putExtra("position", position)
                 context.startActivity(intent)
             }
@@ -45,4 +47,5 @@ class ProfileAdapter(context: Context, users: ArrayList<Profile?>) :
 
         return listItemView.root
     }
+
 }
