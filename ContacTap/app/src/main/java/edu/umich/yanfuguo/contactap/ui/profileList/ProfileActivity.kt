@@ -2,6 +2,7 @@ package edu.umich.yanfuguo.contactap.ui.profileList
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import edu.umich.yanfuguo.contactap.R
@@ -9,7 +10,8 @@ import edu.umich.yanfuguo.contactap.databinding.ActivityProfileBinding
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
 import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.model.ProfileStore
-import edu.umich.yanfuguo.contactap.toast
+import coil.load
+
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -24,6 +26,18 @@ class ProfileActivity : AppCompatActivity() {
         val position = intent.getIntExtra("position",0)
         current_profile = ProfileStore.profiles[position]
 
+        MyInfoStore.myInfo.imageUrl?.let {
+            profileView.profileImage.setVisibility(View.VISIBLE)
+            profileView.profileImage.load(it) {
+                crossfade(true)
+                crossfade(1000)
+            }
+        } ?: run {
+            // if no image
+            // there won’t be a big empty space
+            profileView.profileImage.setVisibility(View.GONE)
+            profileView.profileImage.setImageBitmap(null)
+        }
         // basic
         profileView.checkboxName.text = MyInfoStore.myInfo.name
         profileView.checkboxBEmail.text = MyInfoStore.myInfo.businessEmail
@@ -44,7 +58,19 @@ class ProfileActivity : AppCompatActivity() {
 
 
     }
-    fun checkHelper(){
+    fun checkHelper(checked: Boolean,index: Int){
+        if(index <0 || index >13){
+            Log.d("checkHelper","out of index")
+        }
+        if (checked) {
+            var string = current_profile?.includeBitString
+            string = string?.substring(0, index) + '1' + string?.substring(index + 1)
+            current_profile?.includeBitString = string
+        } else {
+            var string = current_profile?.includeBitString
+            string = string?.substring(0, index) + '0' + string?.substring(index + 1)
+            current_profile?.includeBitString = string
+        }
 
     }
 
@@ -55,18 +81,43 @@ class ProfileActivity : AppCompatActivity() {
 
             when (view.id) {
                 R.id.checkbox_name -> {
-                    if (checked) {
-                        // Put some meat on the sandwich
-                    } else {
-                        // Remove the meat
-                    }
+                    checkHelper(checked,0)
                 }
                 R.id.checkbox_p_email -> {
-                    if (checked) {
-                        // Cheese me
-                    } else {
-                        // I'm lactose intolerant
-                    }
+                    checkHelper(checked,2)
+                }
+                R.id.checkbox_b_email -> {
+                    checkHelper(checked,3)
+                }
+                R.id.checkbox_p_phone -> {
+                    checkHelper(checked,4)
+                }
+                R.id.checkbox_b_phone -> {
+                    checkHelper(checked,5)
+                }
+                R.id.checkbox_o_phone -> {
+                    checkHelper(checked,6)
+                }
+                R.id.checkbox_bio -> {
+                    checkHelper(checked,7)
+                }
+                R.id.checkbox_insta -> {
+                    checkHelper(checked,8)
+                }
+                R.id.checkbox_snap -> {
+                    checkHelper(checked,9)
+                }
+                R.id.checkbox_twitter -> {
+                    checkHelper(checked,10)
+                }
+                R.id.checkbox_linkedin -> {
+                    checkHelper(checked,11)
+                }
+                R.id.checkbox_hobbies -> {
+                    checkHelper(checked,12)
+                }
+                R.id.checkbox_otherinfo -> {
+                    checkHelper(checked,13)
                 }
                 // TODO: Veggie sandwich
             }

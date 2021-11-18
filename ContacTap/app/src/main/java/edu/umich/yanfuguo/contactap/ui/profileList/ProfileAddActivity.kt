@@ -31,10 +31,10 @@ class ProfileAddActivity : AppCompatActivity() {
         if (view.name.text.isNullOrEmpty() || view.description.text.isNullOrEmpty()) {
             setResult(Activity.RESULT_CANCELED, resultIntent)
         } else {
-            val firstName = view.name.text.toString()
-            val lastName = view.description.text.toString()
-            resultIntent.putExtra("name", firstName)
-            resultIntent.putExtra("description", lastName)
+            val profileName = view.name.text.toString()
+            val description = view.description.text.toString()
+            resultIntent.putExtra("name", profileName)
+            resultIntent.putExtra("description", description)
             setResult(Activity.RESULT_OK, resultIntent)
         }
         finish()

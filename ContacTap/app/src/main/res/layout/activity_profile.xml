@@ -21,26 +21,26 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/previewImage"
+                android:id="@+id/profileImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:contentDescription="Preview"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/cameraButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+            <CheckBox
+                android:id="@+id/checkbox_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="20dp"
+                android:onClick="onCheckboxClicked"
                 android:layout_marginTop="16dp"
-                android:contentDescription="Hi"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/previewImage"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
+                app:layout_constraintTop_toTopOf="@+id/profileImage"
+                android:text="@string/profile_image_title" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
