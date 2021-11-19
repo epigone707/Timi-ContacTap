@@ -166,4 +166,5 @@
     <string name="contact_name">Your Contact</string>
     <string name="n_a">N/A</string>
     <string name="profile_image_title">Include the image in this profile</string>
+    <string name="profile_upload_avatar">Please upload an avatar to your info</string>
 </resources>

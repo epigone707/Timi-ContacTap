@@ -37,8 +37,8 @@
                 android:layout_marginEnd="20dp"
                 android:onClick="onCheckboxClicked"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="@+id/profileImage"
-                android:text="@string/profile_image_title" />
+                app:layout_constraintTop_toBottomOf="@+id/profileImage"
+                android:text="@string/profile_upload_avatar" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

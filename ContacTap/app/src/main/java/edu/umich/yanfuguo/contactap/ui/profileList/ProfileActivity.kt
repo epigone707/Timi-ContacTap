@@ -32,12 +32,18 @@ class ProfileActivity : AppCompatActivity() {
                 crossfade(true)
                 crossfade(1000)
             }
+            profileView.checkboxImage.text = getString(R.string.profile_image_title)
         } ?: run {
-            // if no image
+            // if no image has been uploaded
             // there won’t be a big empty space
             profileView.profileImage.setVisibility(View.GONE)
             profileView.profileImage.setImageBitmap(null)
+
         }
+        for(i in 0..13){
+            current_profile?.includeBitString?.let { initCheckBoxes(i, it[i]) }
+        }
+
         // basic
         profileView.checkboxName.text = MyInfoStore.myInfo.name
         profileView.checkboxBEmail.text = MyInfoStore.myInfo.businessEmail
@@ -58,6 +64,61 @@ class ProfileActivity : AppCompatActivity() {
 
 
     }
+    fun initCheckBoxes(index:Int,bit:Char){
+        if(index <0 || index >13){
+            Log.d("initCheckBoxes","out of index")
+        }
+        var initCheckVal = false
+        if(bit=='1'){
+            initCheckVal = true
+        }
+        when (index) {
+            0 -> {
+                profileView.checkboxName.isChecked =initCheckVal
+            }
+            1 -> {
+                profileView.checkboxImage.isChecked =initCheckVal
+            }
+            2 -> {
+                profileView.checkboxPEmail.isChecked =initCheckVal
+            }
+            3 -> {
+                profileView.checkboxBEmail.isChecked =initCheckVal
+            }
+            4 -> {
+                profileView.checkboxPPhone.isChecked =initCheckVal
+            }
+            5 -> {
+                profileView.checkboxBPhone.isChecked =initCheckVal
+            }
+            6 -> {
+                profileView.checkboxOPhone.isChecked =initCheckVal
+            }
+            7 -> {
+                profileView.checkboxBio.isChecked =initCheckVal
+            }
+            8 -> {
+                profileView.checkboxInsta.isChecked =initCheckVal
+            }
+            9 -> {
+                profileView.checkboxSnap.isChecked =initCheckVal
+            }
+            10 -> {
+                profileView.checkboxTwitter.isChecked =initCheckVal
+            }
+            11 -> {
+                profileView.checkboxLinkedin.isChecked =initCheckVal
+            }
+            12-> {
+                profileView.checkboxHobbies.isChecked =initCheckVal
+            }
+            13 -> {
+                profileView.checkboxOtherinfo.isChecked =initCheckVal
+            }
+        }
+
+    }
+
     fun checkHelper(checked: Boolean,index: Int){
         if(index <0 || index >13){
             Log.d("checkHelper","out of index")
@@ -119,7 +180,6 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.checkbox_otherinfo -> {
                     checkHelper(checked,13)
                 }
-                // TODO: Veggie sandwich
             }
         }
     }
