@@ -5,28 +5,58 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
 import edu.umich.yanfuguo.contactap.databinding.FragmentHomeBinding
+import edu.umich.yanfuguo.contactap.model.MyInfoStore
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.myInfo
+import edu.umich.yanfuguo.contactap.model.ProfileStore
+import org.json.JSONException
+import org.json.JSONObject
+import edu.umich.yanfuguo.contactap.R
+import android.util.Log
+
+import android.widget.TextView
+import android.widget.Toast
+
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var fragmentHomeBinding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val binding = FragmentHomeBinding.inflate(inflater, container, false)
+        fragmentHomeBinding = binding
+        val info = myInfo
+        val obj = try { JSONObject(Gson().toJson(info)) } catch (e: JSONException) { JSONObject() }
+        var preview = "PREVIEW"
+        obj.keys().forEach { k->
+            try {
+                if (obj.getString(k).isNotEmpty()){
+                    preview += "$k: ${obj.getString(k)}\n"
+                }else{
+                    Log.d("HomeFragment","empty")
+                }
+
+            } catch (e: JSONException) {
+                Log.e("HomeFragment","JSONException")
+            }
+        }
+//        preview="dfasfsdf"
+        Log.d("HomeFragment",preview)
+        binding.infoText.text = preview.removeSuffix("\n")
+
         return binding.root
     }
 
     override fun onDestroyView() {
+        fragmentHomeBinding = null
         super.onDestroyView()
-        _binding = null
     }
 
 }
