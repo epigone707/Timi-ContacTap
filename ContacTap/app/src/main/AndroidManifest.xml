@@ -32,6 +32,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContacTap">
         <activity
+            android:name=".ui.SignInActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.profileList.ProfileActivity"
             android:exported="true" />
         <activity

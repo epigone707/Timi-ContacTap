@@ -35,4 +35,11 @@
         android:label="@string/menu_share"
         tools:layout="@layout/activity_share" />
 
+    <activity
+        android:id="@+id/nav_login"
+        android:name="edu.umich.yanfuguo.contactap.ui.SignInActivity"
+        android:label="@string/menu_login"
+        tools:layout="@layout/activity_sign_in"
+        />
+
 </navigation>
