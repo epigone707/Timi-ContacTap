@@ -30,10 +30,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Restore data model
+        ProfileStore.init(this)
+        MyInfoStore.init(this)
+        ConnectionStore.init(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
@@ -50,10 +55,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // Restore data model
-        ProfileStore.init(this)
-        MyInfoStore.init(this)
-        ConnectionStore.init(this)
+
 
         // Disable sharing by default
         packageManager.setComponentEnabledSetting(

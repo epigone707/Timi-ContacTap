@@ -177,4 +177,5 @@
     <string name="sign_out">Sign Out</string>
     <string name="disconnect">Disconnect</string>
     <string name="signed_in_fmt">Signed in as: %s</string>
+    <string name="edit_your_info">My Info</string>
 </resources>

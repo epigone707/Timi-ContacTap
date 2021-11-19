@@ -1,5 +1,6 @@
 package edu.umich.yanfuguo.contactap.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +15,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import edu.umich.yanfuguo.contactap.R
 import android.util.Log
-
-import android.widget.TextView
-import android.widget.Toast
 
 
 class HomeFragment : Fragment() {
@@ -34,7 +32,7 @@ class HomeFragment : Fragment() {
         fragmentHomeBinding = binding
         val info = myInfo
         val obj = try { JSONObject(Gson().toJson(info)) } catch (e: JSONException) { JSONObject() }
-        var preview = "PREVIEW"
+        var preview = ""
         obj.keys().forEach { k->
             try {
                 if (obj.getString(k).isNotEmpty()){
@@ -47,9 +45,12 @@ class HomeFragment : Fragment() {
                 Log.e("HomeFragment","JSONException")
             }
         }
-//        preview="dfasfsdf"
         Log.d("HomeFragment",preview)
-        binding.infoText.text = preview.removeSuffix("\n")
+        binding.cardInfo.text = preview.removeSuffix("\n")
+        binding.cardView.setOnClickListener{
+            val intent = Intent(activity, ContactInfoActivity::class.java)
+            startActivity(intent)
+        }
 
         return binding.root
     }
@@ -58,5 +59,7 @@ class HomeFragment : Fragment() {
         fragmentHomeBinding = null
         super.onDestroyView()
     }
+
+
 
 }

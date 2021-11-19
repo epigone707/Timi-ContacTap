@@ -61,9 +61,18 @@ class ProfileActivity : AppCompatActivity() {
         profileView.checkboxHobbies.text = MyInfoStore.myInfo.hobbies
         profileView.checkboxOtherinfo.text = MyInfoStore.myInfo.other
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
 
 
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     fun initCheckBoxes(index:Int,bit:Char){
         if(index <0 || index >13){
             Log.d("initCheckBoxes","out of index")
