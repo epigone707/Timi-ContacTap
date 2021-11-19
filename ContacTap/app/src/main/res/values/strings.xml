@@ -29,10 +29,13 @@
     <string name="title_activity_contact_info">ContactInfoActivity</string>
     <string name="contact_info_basic_title">Basic Info</string>
     <string name="contact_info_name_title">Name *</string>
+    <string name="contact_info_name_title_">Name</string>
     <string name="contact_info_phone_title">Phone # *</string>
     <string name="contact_info_personal_email_title">Personal Email Address *</string>
+    <string name="contact_info_personal_email_title_">Personal Email Address</string>
     <string name="contact_info_business_email_title">Business Email Address</string>
     <string name="contact_info_personal_phone_title">Personal Phone*</string>
+    <string name="contact_info_personal_phone_title_">Personal Phone</string>
     <string name="contact_info_business_phone_title">Business Phone</string>
     <string name="contact_info_other_phone_title">Other Phone</string>
     <string name="contact_info_bio_title">Bio</string>
@@ -161,4 +164,7 @@
 
     <!-- ProfileList Strings -->
     <string name="contact_name">Your Contact</string>
+    <string name="n_a">N/A</string>
+    <string name="profile_image_title">Include the image in this profile</string>
+    <string name="profile_upload_avatar">Please upload an avatar to your info</string>
 </resources>

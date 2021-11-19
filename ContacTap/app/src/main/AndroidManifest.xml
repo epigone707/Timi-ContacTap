@@ -32,6 +32,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContacTap">
         <activity
+            android:name=".ui.profileList.ProfileActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.ShareActivity"
             android:exported="true"
             android:label="Share" />
@@ -49,7 +52,9 @@
             android:label="ContactList">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>

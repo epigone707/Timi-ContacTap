@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.databinding.FragmentProfileListBinding
 import edu.umich.yanfuguo.contactap.model.Profile
+import edu.umich.yanfuguo.contactap.model.ProfileStore.createProfile
 import edu.umich.yanfuguo.contactap.model.ProfileStore.insert
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
 
@@ -48,7 +49,8 @@ class ProfileListActivity: AppCompatActivity() {
             val description = data?.getStringExtra("description")
 
             if (name != null && description != null) {
-                insert(this, Profile(name, "", description, ""))
+                insert(this, Profile(name, "", description, "10000000000000"))
+                //createProfile(this,"10000000000000", name, description)
                 profileAdapter.notifyDataSetChanged()
             }
         }

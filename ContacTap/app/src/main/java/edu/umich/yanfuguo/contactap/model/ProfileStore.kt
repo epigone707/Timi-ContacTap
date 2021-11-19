@@ -43,6 +43,10 @@ object ProfileStore {
         ed.apply()
     }
 
+    /**
+     This function is only used for testing the local storage!
+     instead, use createProfile if the backend has been setup!
+     */
     fun insert(context: Context, profile: Profile) {
         profiles.add(profile)
         commit(context)
