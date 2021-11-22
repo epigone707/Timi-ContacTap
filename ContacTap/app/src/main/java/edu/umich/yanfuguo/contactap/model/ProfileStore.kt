@@ -20,6 +20,9 @@ object ProfileStore {
     // all current user's profiles
     var profiles = arrayListOf<Profile?>()
 
+    /**
+     * initialize profiles from the SharedPreference file
+     */
     fun init(context: Context) {
         val sharedPref: SharedPreferences =
             context.getSharedPreferences("profiles_data", Context.MODE_PRIVATE)
@@ -35,6 +38,9 @@ object ProfileStore {
         }
     }
 
+    /**
+     * store profiles to the SharedPreference file
+     */
     fun commit(context: Context){
         val sharedPref: SharedPreferences =
             context.getSharedPreferences("profiles_data", Context.MODE_PRIVATE)
@@ -44,6 +50,7 @@ object ProfileStore {
     }
 
     /**
+     * insert a profile into profiles
      This function is only used for testing the local storage!
      instead, use createProfile if the backend has been setup!
      */
@@ -52,6 +59,9 @@ object ProfileStore {
         commit(context)
     }
 
+    /**
+     * delete a profile
+     */
     fun delete(context: Context, pos: Int) {
         profiles.removeAt(pos)
         commit(context)
@@ -59,11 +69,17 @@ object ProfileStore {
 
     /**
      * Get all current user's profiles from server and update the local profiles list
+     * communicate with Get Profiles API
      */
     fun getProfiles(context: Context, completion: () -> Unit) {
-        val uri = MyInfoStore.serverUrl +"profiles/?userId=${userId}"
 
-        val getRequest = JsonObjectRequest(uri,
+        val jsonObj = mapOf(
+            "userId" to userId,
+        )
+        val postRequest = JsonObjectRequest(
+            Request.Method.POST,
+            MyInfoStore.serverUrl +"profiles/",
+            JSONObject(jsonObj),
             { response ->
                 val profilesArray = try { response.getJSONArray("profiles") } catch (e: JSONException) { JSONArray() }
                 profiles.clear()
@@ -80,23 +96,27 @@ object ProfileStore {
                 }
                 commit(context)
                 completion()
-            }, { completion() }
+            },
+            { error -> Log.e("getProfiles", error.localizedMessage ?: "JsonObjectRequest error") }
         )
 
         if (!MyInfoStore.isThingInitialized) {
             MyInfoStore.queue = Volley.newRequestQueue(context)
         }
-        MyInfoStore.queue.add(getRequest)
+        MyInfoStore.queue.add(postRequest)
     }
 
     /**
      * Create a profile, send the userId and includeBitString to server, get the profileId
      * then store the profile in local storage
+     * communicate with Create Profile API
      */
     fun createProfile(context: Context, includeBitString: String, profileName: String, description: String) {
         val jsonObj = mapOf(
             "userId" to userId,
             "includeBitString" to includeBitString,
+            "profileName" to profileName,
+            "description" to description
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
@@ -129,18 +149,18 @@ object ProfileStore {
     /**
      * Update a profile based on user's modification on what
      * information they choose to include in the profile.
+     * Communicate with Update Profile API
      *
      */
     fun updateProfile(context: Context, profileId: String, includeBitString: String,
                       profileName: String, description: String) {
-        val jsonObject = JSONObject()
 
         val jsonObj = mapOf(
             "userId" to userId,
             "profileName" to profileName,
             "description" to description,
+            "profileId" to profileId,
             "includeBitString" to includeBitString,
-            "profileId" to profileId
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
@@ -172,6 +192,9 @@ object ProfileStore {
         MyInfoStore.queue.add(postRequest)
     }
 
+    /**
+     * Communicate with Delete Profile API
+     */
     fun deleteProfile(context: Context, profileId: String) {
         val jsonObj = mapOf(
             "userId" to userId,

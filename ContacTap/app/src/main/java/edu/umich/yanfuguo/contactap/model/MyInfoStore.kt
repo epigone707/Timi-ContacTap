@@ -19,7 +19,9 @@ object MyInfoStore {
     lateinit var queue: RequestQueue
     val isThingInitialized get() = this::queue.isInitialized
 
+    //TODO
     const val serverUrl = "exmaple/"
+
 
     var userId = ""
 

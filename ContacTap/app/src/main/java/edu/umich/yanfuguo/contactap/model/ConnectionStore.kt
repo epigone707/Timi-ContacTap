@@ -56,9 +56,17 @@ object ConnectionStore {
         commit(context)
     }
 
+    /**
+     * Communicate with Get Connections API
+     */
     fun getMyConnections(context: Context, completion: () -> Unit) {
-        val getRequest = JsonObjectRequest(
-            MyInfoStore.serverUrl +"connections/?id=$userId",
+        val jsonObj = mapOf(
+            "userId" to userId,
+        )
+        val postRequest = JsonObjectRequest(
+            Request.Method.POST,
+            MyInfoStore.serverUrl +"connections/",
+            JSONObject(jsonObj),
             { response ->
                 val received = try { response.getJSONArray("chatts") } catch (e: JSONException) { JSONArray() }
                 for (i in 0 until received.length()) {
@@ -87,10 +95,15 @@ object ConnectionStore {
         if (!MyInfoStore.isThingInitialized) {
             MyInfoStore.queue = Volley.newRequestQueue(context)
         }
-        MyInfoStore.queue.add(getRequest)
+        MyInfoStore.queue.add(postRequest)
     }
 
-    fun postConnection(context: Context, profileId: String, location: String) {
+    /**
+     * Create a new connection between a user and a profile.
+     * Happens after a successful contact exchange between two users.
+     * Communicate with Create Connection API
+     */
+    fun createConnection(context: Context, profileId: String, location: String) {
         val date = Calendar.getInstance().time
         val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
         val formatedDate = formatter.format(date)
@@ -102,15 +115,54 @@ object ConnectionStore {
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
-            MyInfoStore.serverUrl +"contactinfo/", JSONObject(jsonObj),
-            { Log.d("postMyInfo", " posted!") },
-            { error -> Log.e("postMyInfo", error.localizedMessage ?: "JsonObjectRequest error") }
+            MyInfoStore.serverUrl + "connection/create/", JSONObject(jsonObj),
+            { Log.d("createConnection", " posted!") },
+            { error ->
+                Log.e(
+                    "createConnection",
+                    error.localizedMessage ?: "JsonObjectRequest error"
+                )
+            }
         )
 
         if (!MyInfoStore.isThingInitialized) {
             MyInfoStore.queue = Volley.newRequestQueue(context)
         }
         MyInfoStore.queue.add(postRequest)
+    }
+
+    /**
+     * TODO
+     */
+    fun deleteConnection(context: Context, profileId: String,){
+//        val jsonObj = mapOf(
+//            "userId" to userId,
+//            "profileId" to profileId,
+//        )
+//        val postRequest = JsonObjectRequest(
+//            Request.Method.POST,
+//            MyInfoStore.serverUrl +"connection/delete/",
+//            JSONObject(jsonObj),
+//            {
+//                Log.d("deleteConnection", " get the response!")
+//                val strResp = it.toString()
+//                val entry = JSONObject(strResp)
+//                for (i in connections.indices){
+//                    if(connections[i]?.profileId==profileId){
+//                        connections.removeAt(i)
+//                        break
+//                    }
+//                }
+//                Log.d("deleteConnection", " deleted!")
+//                commit(context)
+//            },
+//            { error -> Log.e("deleteConnection", error.localizedMessage ?: "JsonObjectRequest error") }
+//        )
+//
+//        if (!MyInfoStore.isThingInitialized) {
+//            MyInfoStore.queue = Volley.newRequestQueue(context)
+//        }
+//        MyInfoStore.queue.add(postRequest)
     }
 
 }
