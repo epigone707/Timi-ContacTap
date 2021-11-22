@@ -1,4 +1,4 @@
-package edu.umich.yanfuguo.contactap
+package edu.umich.yanfuguo.contactap.nfc
 
 import android.app.Service
 import android.content.Intent

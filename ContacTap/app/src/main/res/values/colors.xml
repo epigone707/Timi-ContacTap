@@ -9,4 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="share_active">#FF03DAC5</color>
     <color name="share_inactive">#FFD0DFE7</color>
+    <color name="blue_grey_500">#607D8B</color>
+    <color name="blue_grey_600">#546E7A</color>
+    <color name="blue_grey_700">#455A64</color>
+    <color name="blue_grey_800">#37474F</color>
+    <color name="blue_grey_900">#263238</color>
+
 </resources>

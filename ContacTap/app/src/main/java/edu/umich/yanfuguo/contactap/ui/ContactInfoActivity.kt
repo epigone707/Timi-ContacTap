@@ -11,28 +11,32 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import edu.umich.yanfuguo.contactap.R
-import edu.umich.yanfuguo.contactap.databinding.ActivityContactInfoBinding
+import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
 import edu.umich.yanfuguo.contactap.display
+import edu.umich.yanfuguo.contactap.model.MyInfoStore
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.myInfo
 import edu.umich.yanfuguo.contactap.toast
 
 class ContactInfoActivity : AppCompatActivity() {
 
-    private lateinit var contactInfoView: ActivityContactInfoBinding
+    private lateinit var contactInfoView: FragmentContactInfoBinding
 
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        contactInfoView = ActivityContactInfoBinding.inflate(layoutInflater)
+        contactInfoView = FragmentContactInfoBinding.inflate(layoutInflater)
         setContentView(contactInfoView.root)
 
-        val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
             results.forEach {
                 if (!it.value) {
                     toast("${it.key} access denied")
@@ -69,6 +73,7 @@ class ContactInfoActivity : AppCompatActivity() {
 
         val takePictureResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
+                imageUri?.let { contactInfoView.previewImage.display(it) }
                 doCrop(cropIntent)
             } else {
                 Log.d("TakePicture", "failed")
@@ -80,8 +85,15 @@ class ContactInfoActivity : AppCompatActivity() {
             takePictureResult.launch(imageUri)
         }
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        imageUri = MyInfoStore.updateContent(contactInfoView)
+
+        // if is welcome
+        if (myInfo.name == "") {
+            contactInfoView.contactInfoWelcomeMsg.visibility = View.VISIBLE
+        } else {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -151,5 +163,22 @@ class ContactInfoActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         imageUri = savedInstanceState.getParcelable<Uri>("imageUri")
         imageUri?.let { contactInfoView.previewImage.display(it) }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_contact_info, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.done_button -> {
+                MyInfoStore.saveContent(this, contactInfoView, imageUri)
+                setResult(Activity.RESULT_OK, Intent())
+                finish()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

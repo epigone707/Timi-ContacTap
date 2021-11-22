@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package com.example.recyclersample.data
+package edu.umich.yanfuguo.contactap.model
 
 
 data class Profile(
-    val id: Long,
-    val firstName: String,
-    val lastName: String,
+    // profile name, entered by user
+    var name: String,
+
+    // profile id, return from server
+    var profileId: String,
+
+    // description, entered by user
+    var description: String,
+
+    var includeBitString: String,
 )

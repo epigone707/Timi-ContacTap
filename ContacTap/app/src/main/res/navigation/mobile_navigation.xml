@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="edu.umich.yanfuguo.contactap.ui.home.HomeFragment"
+        android:name="edu.umich.yanfuguo.contactap.ui.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
@@ -15,24 +15,31 @@
         android:id="@+id/nav_contact_info"
         android:name="edu.umich.yanfuguo.contactap.ui.ContactInfoActivity"
         android:label="@string/menu_contact_info"
-        tools:layout="@layout/activity_contact_info" />
+        tools:layout="@layout/fragment_contact_info" />
 
     <activity
         android:id="@+id/nav_profiles"
-        android:name="edu.umich.yanfuguo.contactap.ui.ProfileListActivity"
+        android:name="edu.umich.yanfuguo.contactap.ui.profileList.ProfileListActivity"
         android:label="@string/menu_profiles"
-        tools:layout="@layout/activity_profile_list" />
+        tools:layout="@layout/fragment_profile_list" />
 
     <activity
         android:id="@+id/nav_contacts"
-        android:name="edu.umich.yanfuguo.contactap.contactListActivity"
+        android:name="edu.umich.yanfuguo.contactap.ui.contactList.ContactListActivity"
         android:label="@string/menu_contacts"
-        tools:layout="@layout/activity_contact_list" />
+        tools:layout="@layout/fragment_contact_list" />
 
     <activity
         android:id="@+id/nav_share"
         android:name="edu.umich.yanfuguo.contactap.ui.ShareActivity"
         android:label="@string/menu_share"
         tools:layout="@layout/activity_share" />
+
+    <activity
+        android:id="@+id/nav_login"
+        android:name="edu.umich.yanfuguo.contactap.ui.SignInActivity"
+        android:label="@string/menu_login"
+        tools:layout="@layout/activity_sign_in"
+        />
 
 </navigation>

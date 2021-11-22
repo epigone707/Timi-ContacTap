@@ -6,20 +6,26 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.nfc.NfcAdapter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import edu.umich.yanfuguo.contactap.KHostApduService
-import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
+import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.R.color.share_active
 import edu.umich.yanfuguo.contactap.R.color.share_inactive
+import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedInfo
+import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
+import edu.umich.yanfuguo.contactap.nfc.KHostApduService
 import edu.umich.yanfuguo.contactap.toast
+import org.json.JSONException
+import org.json.JSONObject
 
 class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var isSharing = false
+    private var selectedId = 0
     private lateinit var shareView: ActivityShareBinding
 
     private var mNfcAdapter: NfcAdapter? = null
@@ -30,14 +36,21 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         shareView = ActivityShareBinding.inflate(layoutInflater)
         setContentView(shareView.root)
 
+        if (profiles.size == 0) {
+            toast("Please create a profile to share")
+            finish()
+        }
+
         // add back (left arrow) button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         // init profile selection Spinner
-        val items = arrayOf("Personal", "Business", "EECS 441")
+        val items = profiles.map {p ->p?.name}
         val adapter = ArrayAdapter(this, simple_spinner_dropdown_item, items)
         shareView.profileSelector.adapter = adapter
+        shareView.profileSelector.setSelection(
+            intent.getIntExtra("profileId", selectedId))
         shareView.profileSelector.onItemSelectedListener = this
 
         // init NFC
@@ -47,16 +60,21 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun initNFCFunction(): Boolean {
         return if (checkNFCEnable() && packageManager.hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION)) {
             toggleService(true)
-            true
         } else {
             showTurnOnNfcDialog()
             false
         }
     }
 
-    private fun toggleService(enable: Boolean) {
+    private fun toggleService(enable: Boolean): Boolean {
         val intent = Intent(this@ShareActivity, KHostApduService::class.java)
-        intent.putExtra("ndefMessage", "Name: Place Holder, Phone: 1234567890, Email:1234567890@umich.edu")
+        if (selectedId >= profiles.size) return false
+
+        // gen message
+        val info = getMaskedInfo(profiles[selectedId])
+        intent.putExtra("ndefMessage", Gson().toJson(info))
+
+        // toggle service
         if(enable) {
             packageManager.setComponentEnabledSetting(
                 ComponentName(this@ShareActivity, KHostApduService::class.java),
@@ -70,6 +88,7 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 PackageManager.DONT_KILL_APP)
             stopService(intent)
         }
+        return enable
     }
 
     private fun checkNFCEnable(): Boolean {
@@ -96,11 +115,9 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         mTurnNfcDialog.show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (isSharing && mNfcAdapter!!.isEnabled) {
-            initNFCFunction()
-        }
+    override fun onPause() {
+        if (isSharing) toggleShare(null)
+        super.onPause()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -109,9 +126,21 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        toast("Selected profile $pos")
+        selectedId = pos
+        shareView.headerTitle.text = profiles[selectedId]?.name
+        shareView.headerSubtitle.text = profiles[selectedId]?.description
+
+        // gen preview
+        val info = getMaskedInfo(profiles[selectedId])
+        val obj = try { JSONObject(Gson().toJson(info)) } catch (e: JSONException) { JSONObject() }
+        var preview = ""
+        obj.keys().forEach { k->
+            try {
+                if (obj.getString(k).isNotEmpty())
+                    preview += "$k: ${obj.getString(k)}\n"
+            } catch (e: JSONException) {}
+        }
+        shareView.previewText.text = preview.removeSuffix("\n")
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {

@@ -32,21 +32,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContacTap">
         <activity
-            android:name=".contactListActivity"
+            android:name=".ui.SignInActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.ContactInfoActivity"
-            android:exported="true"
-            android:label="@string/title_activity_contact_info" />
+            android:name=".ui.profileList.ProfileActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.ShareActivity"
             android:exported="true"
             android:label="Share" />
         <activity
-            android:name=".ui.ProfileListActivity"
+            android:name=".ui.ContactInfoActivity"
             android:exported="true"
-            android:label="My Profiles" />
-        <activity android:name=".ui.ProfileData.AddProfileActivity" />
+            android:label="ContactInfo" />
+        <activity
+            android:name=".ui.profileList.ProfileListActivity"
+            android:exported="true"
+            android:label="ProfileList" />
+        <activity
+            android:name=".ui.contactList.ContactListActivity"
+            android:exported="true"
+            android:label="ContactList">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.profileList.ProfileAddActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -58,17 +73,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
         </activity>
 
         <service
-            android:name=".KHostApduService"
+            android:name=".nfc.KHostApduService"
             android:enabled="false"
             android:exported="true"
             android:permission="android.permission.BIND_NFC_SERVICE">

@@ -12,6 +12,7 @@
     <string name="menu_profiles">My Profiles</string>
     <string name="menu_contacts">Contacts</string>
     <string name="menu_share">Share</string>
+    <string name="menu_login">Login/Logout</string>
 
     <string name="ad_nfcTurnOn_pos">Turn on</string>
     <string name="ad_nfcTurnOn_neg">Dismiss</string>
@@ -29,14 +30,24 @@
     <string name="title_activity_contact_info">ContactInfoActivity</string>
     <string name="contact_info_basic_title">Basic Info</string>
     <string name="contact_info_name_title">Name *</string>
+    <string name="contact_info_name_title_">Name</string>
     <string name="contact_info_phone_title">Phone # *</string>
-    <string name="contact_info_email_title">Email Address *</string>
+    <string name="contact_info_personal_email_title">Personal Email Address *</string>
+    <string name="contact_info_personal_email_title_">Personal Email Address</string>
+    <string name="contact_info_business_email_title">Business Email Address</string>
+    <string name="contact_info_personal_phone_title">Personal Phone*</string>
+    <string name="contact_info_personal_phone_title_">Personal Phone</string>
+    <string name="contact_info_business_phone_title">Business Phone</string>
+    <string name="contact_info_other_phone_title">Other Phone</string>
+    <string name="contact_info_bio_title">Bio</string>
     <string name="contact_info_social_title">Social Media</string>
     <string name="contact_info_insta_title">Instagram</string>
     <string name="contact_info_snap_title">SnapChat</string>
     <string name="contact_info_twitter_title">Twitter</string>
     <string name="contact_info_linkedin_title">LinkedIn</string>
     <string name="contact_info_other_title">Other(s)</string>
+    <string name="contact_info_hobbies_title">Hobbies</string>
+    <string name="contact_info_otherinfo_title">Other Information</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -135,16 +146,36 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="contact_info_title_1_Welcome_to_ContacTap">Welcome to ContacTap!</string>
+    <string name="contact_info_title_2_Welcome_to_ContacTap">Please enter your basic information to be shared to your new friends</string>
 
     <!-- ProfileList Strings -->
-    <string name="profilePic">Your Profile</string>
-    <string name="profileTitle">Profile</string>
-    <string name="userFullName">Your Name Here</string>
-    <string name="editProfile">Edit</string>
-    <string name="shareFromProfile">Share</string>
+    <string name="profile_pic">Your Profile</string>
+    <string name="profile_title">Profile</string>
+    <string name="share_from_profile">Share</string>
     <string name="fab_content_description">fab</string>
     <string name="done_button_text">Done</string>
     <string name="add_profile">Add Profile</string>
+    <string name="profile_name_edit_text">Profile Name</string>
+    <string name="profile_description_edit_text">Description</string>
+    <string name="share">Share</string>
+    <string name="done_button_title">Done</string>
     <string name="first_name_edit_text">First Name</string>
     <string name="last_name_edit_text">Last Name</string>
+
+    <!-- ProfileList Strings -->
+    <string name="contact_name">Your Contact</string>
+    <string name="n_a">N/A</string>
+    <string name="profile_image_title">Include the image in this profile</string>
+    <string name="profile_upload_avatar">Please upload an avatar to your info</string>
+
+    <!-- Login Strings -->
+    <string name="name_sign_in_activity">SignInActivity</string>
+    <string name="desc_google_icon">Google Logo</string>
+    <string name="title_text">Google Sign-In\nQuickstart</string>
+    <string name="signed_out">Signed out</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="signed_in_fmt">Signed in as: %s</string>
+    <string name="edit_your_info">My Info</string>
 </resources>

@@ -1,12 +1,7 @@
-package edu.umich.yanfuguo.contactap
+package edu.umich.yanfuguo.contactap.nfc
 
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
-
-
-interface ParsedNdefRecord {
-    fun str(): String
-}
 
 object NdefMessageParser {
 

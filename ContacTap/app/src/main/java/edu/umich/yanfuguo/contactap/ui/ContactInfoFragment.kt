@@ -1,8 +1,7 @@
-package edu.umich.yanfuguo.contactap.ui.contactinfo
+package edu.umich.yanfuguo.contactap.ui
 
 import android.Manifest
 import android.app.Activity
-import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,24 +11,19 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
-import android.content.ContentResolver
-import android.widget.Button
-import android.widget.ImageView
+import edu.umich.yanfuguo.contactap.display
+import edu.umich.yanfuguo.contactap.model.MyInfoStore
 
 class ContactInfoFragment : Fragment() {
-
-    private lateinit var contactInfoViewModel: ContactInfoViewModel
     private var _binding: FragmentContactInfoBinding? = null
 
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
@@ -44,14 +38,8 @@ class ContactInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        contactInfoViewModel =
-            ViewModelProvider(this).get(ContactInfoViewModel::class.java)
 
         _binding = FragmentContactInfoBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val previewImage = getView()?.findViewById<ImageView>(R.id.previewImage)
-        val cameraButton = requireActivity().findViewById<Button>(R.id.cameraButton)
 
         val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { success ->
             if (!success) {
@@ -74,9 +62,7 @@ class ContactInfoFragment : Fragment() {
                             }
                         }
                         imageUri = it
-                        //imageUri?.let { previewImage.display(it) }
-
-
+                        imageUri?.let { binding.previewImage.display(it) }
                     }
                 } else {
                     Log.d("Crop", result.resultCode.toString())
@@ -89,6 +75,7 @@ class ContactInfoFragment : Fragment() {
 
         val takePictureResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
+                imageUri?.let { binding.previewImage.display(it) }
                 doCrop(cropIntent)
             } else {
                 Log.d("TakePicture", "failed")
@@ -96,16 +83,15 @@ class ContactInfoFragment : Fragment() {
         }
 
         activity?.let {
-
-
-            cameraButton.setOnClickListener{
+            binding.cameraButton.setOnClickListener{
                 imageUri = mediaStoreAlloc("image/jpeg")
                 takePictureResult.launch(imageUri)
             }
         }
 
+        imageUri = MyInfoStore.updateContent(binding)
 
-        return root
+        return binding.root
     }
 
     private fun initCropIntent(): Intent? {
@@ -118,15 +104,6 @@ class ContactInfoFragment : Fragment() {
             Toast.makeText(activity, "Device does not support image cropping", Toast.LENGTH_SHORT).show()
             return null
         }
-
-        /*intent.component = listofCroppers.get(0)?.activityInfo?.packageName?.let {
-            listofCroppers?.get(0)?.activityInfo?.name?.let { it1 ->
-                ComponentName(
-                    it,
-                    it1
-                )
-            }
-        }*/
 
         // create a square crop box:
         intent.putExtra("outputX", 500)
@@ -171,12 +148,21 @@ class ContactInfoFragment : Fragment() {
         savedInstanceState.putParcelable("imageUri", imageUri)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.done_button -> {
+                activity?.let { MyInfoStore.saveContent(it, binding, imageUri) }
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState != null) {
             imageUri = savedInstanceState.getParcelable<Uri>("imageUri")
         }
-        //imageUri?.let { view?.findViewById<ImageView>(R.id.previewImage).display(it) }
     }
 
     override fun onDestroyView() {
