@@ -16,4 +16,8 @@ data class Contact (
     var linkedIn: String = "",
     var hobbies: String = "",
     var other: String = "",
+
+//    // profile id
+//    // this field is useful only if this Contact object is used for storing a connection
+//    var profileId: String = "",
 )

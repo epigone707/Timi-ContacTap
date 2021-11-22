@@ -38,6 +38,9 @@ object ConnectionStore {
         }
     }
 
+    /**
+     * store connections to the SharedPreference file
+     */
     fun commit(context: Context){
         val sharedPref: SharedPreferences =
             context.getSharedPreferences("contacts_data", Context.MODE_PRIVATE)
@@ -129,40 +132,6 @@ object ConnectionStore {
             MyInfoStore.queue = Volley.newRequestQueue(context)
         }
         MyInfoStore.queue.add(postRequest)
-    }
-
-    /**
-     * TODO
-     */
-    fun deleteConnection(context: Context, profileId: String,){
-//        val jsonObj = mapOf(
-//            "userId" to userId,
-//            "profileId" to profileId,
-//        )
-//        val postRequest = JsonObjectRequest(
-//            Request.Method.POST,
-//            MyInfoStore.serverUrl +"connection/delete/",
-//            JSONObject(jsonObj),
-//            {
-//                Log.d("deleteConnection", " get the response!")
-//                val strResp = it.toString()
-//                val entry = JSONObject(strResp)
-//                for (i in connections.indices){
-//                    if(connections[i]?.profileId==profileId){
-//                        connections.removeAt(i)
-//                        break
-//                    }
-//                }
-//                Log.d("deleteConnection", " deleted!")
-//                commit(context)
-//            },
-//            { error -> Log.e("deleteConnection", error.localizedMessage ?: "JsonObjectRequest error") }
-//        )
-//
-//        if (!MyInfoStore.isThingInitialized) {
-//            MyInfoStore.queue = Volley.newRequestQueue(context)
-//        }
-//        MyInfoStore.queue.add(postRequest)
     }
 
 }
