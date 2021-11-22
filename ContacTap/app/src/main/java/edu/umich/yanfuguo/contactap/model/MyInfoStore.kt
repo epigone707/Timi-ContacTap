@@ -23,6 +23,9 @@ object MyInfoStore {
 
     var userId = ""
 
+    /**
+     * initialize myInfo from the SharedPreference file
+     */
     fun init(context: Context) {
         val sharedPref: SharedPreferences =
             context.getSharedPreferences("my_info_data", Context.MODE_PRIVATE)
@@ -31,6 +34,9 @@ object MyInfoStore {
         }
     }
 
+    /**
+     * store myInfo to the SharedPreference file
+     */
     fun commit(context: Context){
         val sharedPref: SharedPreferences =
             context.getSharedPreferences("my_info_data", Context.MODE_PRIVATE)
@@ -40,38 +46,44 @@ object MyInfoStore {
     }
 
     /**
-     * Get user's contact info from the server.
+     * Get user's contact info from the server and
+     * store it to the SharedPreference file
      */
     fun getMyInfo(context: Context, completion: () -> Unit) {
-        val uri = serverUrl+"contactinfo/?id=$userId"
 
-        val getRequest = JsonObjectRequest(uri,
+        val jsonObj = mapOf(
+            "userId" to userId,
+        )
+        val postRequest = JsonObjectRequest(
+            Request.Method.POST,
+            MyInfoStore.serverUrl +"contactinfo/",
+            JSONObject(jsonObj),
             { response ->
-                val strResp = response.toString()
-                val jsonObj = JSONObject(strResp)
-                myInfo.name = jsonObj.getString("name")
-                myInfo.imageUrl = jsonObj.getString("imageUrl")
-                myInfo.personalEmail = jsonObj.getString("personalEmail")
-                myInfo.businessEmail = jsonObj.getString("businessEmail")
-                myInfo.personalPhone = jsonObj.getString("personalPhone")
-                myInfo.businessPhone = jsonObj.getString("businessPhone")
-                myInfo.otherPhone = jsonObj.getString("otherPhone")
-                myInfo.bio = jsonObj.getString("bio")
-                myInfo.instagram = jsonObj.getString("instagram")
-                myInfo.snapchat = jsonObj.getString("snapchat")
-                myInfo.twitter = jsonObj.getString("twitter")
-                myInfo.linkedIn = jsonObj.getString("linkedIn")
-                myInfo.hobbies = jsonObj.getString("hobbies")
-                myInfo.other = jsonObj.getString("other")
+                val contactInfo = response.getJSONObject("contactinfo")
+                myInfo.name = contactInfo.getString("name")
+                myInfo.imageUrl = contactInfo.getString("imageUrl")
+                myInfo.personalEmail = contactInfo.getString("personalEmail")
+                myInfo.businessEmail = contactInfo.getString("businessEmail")
+                myInfo.personalPhone = contactInfo.getString("personalPhone")
+                myInfo.businessPhone = contactInfo.getString("businessPhone")
+                myInfo.otherPhone = contactInfo.getString("otherPhone")
+                myInfo.bio = contactInfo.getString("bio")
+                myInfo.instagram = contactInfo.getString("instagram")
+                myInfo.snapchat = contactInfo.getString("snapchat")
+                myInfo.twitter = contactInfo.getString("twitter")
+                myInfo.linkedIn = contactInfo.getString("linkedIn")
+                myInfo.hobbies = contactInfo.getString("hobbies")
+                myInfo.other = contactInfo.getString("other")
                 commit(context)
                 completion()
-            }, { completion() }
+            },
+            { error -> Log.e("getMyInfo", error.localizedMessage ?: "JsonObjectRequest error") }
         )
 
         if (!this::queue.isInitialized) {
             queue = newRequestQueue(context)
         }
-        queue.add(getRequest)
+        queue.add(postRequest)
     }
 
     /**
@@ -81,6 +93,7 @@ object MyInfoStore {
      */
     fun postMyInfo(context: Context, contact: Contact) {
         val jsonObj = mapOf(
+            "userId" to userId,
             "name" to contact.name,
             "imageUrl" to contact.imageUrl,
             "businessEmail" to contact.personalEmail,
@@ -97,7 +110,7 @@ object MyInfoStore {
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
-            this.serverUrl +"contactinfo/", JSONObject(jsonObj),
+            this.serverUrl +"contactinfo/create/", JSONObject(jsonObj),
             { Log.d("postMyInfo", " posted!") },
             { error -> Log.e("postMyInfo", error.localizedMessage ?: "JsonObjectRequest error") }
         )
@@ -106,6 +119,49 @@ object MyInfoStore {
             this.queue = Volley.newRequestQueue(context)
         }
         this.queue.add(postRequest)
+    }
+
+    /**
+     * Back up user's whole set profiles setting to the server.
+     * Every time the user makes changes to whole set contact
+     * information (without changing profile image), the app will send this request.
+     */
+    fun updateMyInfo(context: Context, contact: Contact) {
+        val jsonObj = mapOf(
+            "userId" to userId,
+            "name" to contact.name,
+            "imageUrl" to contact.imageUrl,
+            "businessEmail" to contact.personalEmail,
+            "personalPhone" to contact.personalPhone,
+            "businessPhone" to contact.businessPhone,
+            "otherPhone" to contact.otherPhone,
+            "bio" to contact.bio,
+            "instagram" to contact.instagram,
+            "snapchat" to contact.snapchat,
+            "twitter" to contact.twitter,
+            "linkedIn" to contact.linkedIn,
+            "hobbies" to contact.hobbies,
+            "other" to contact.other,
+        )
+        val postRequest = JsonObjectRequest(
+            Request.Method.POST,
+            this.serverUrl +"contactinfo/update/", JSONObject(jsonObj),
+            { Log.d("updateMyInfo", " posted!") },
+            { error -> Log.e("updateMyInfo", error.localizedMessage ?: "JsonObjectRequest error") }
+        )
+
+        if (!this::queue.isInitialized) {
+            this.queue = Volley.newRequestQueue(context)
+        }
+        this.queue.add(postRequest)
+    }
+
+    /**
+     * When user changes their profile image, this request is sent
+     * TODO
+     */
+    fun updateImage(){
+
     }
 
 
