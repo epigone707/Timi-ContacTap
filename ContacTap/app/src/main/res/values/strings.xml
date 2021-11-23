@@ -158,7 +158,7 @@
     <string name="add_profile">Add Profile</string>
     <string name="profile_name_edit_text">Profile Name</string>
     <string name="profile_description_edit_text">Description</string>
-    <string name="share">Share</string>
+    <string name="share">Share the profile</string>
     <string name="done_button_title">Done</string>
     <string name="first_name_edit_text">First Name</string>
     <string name="last_name_edit_text">Last Name</string>
@@ -178,4 +178,5 @@
     <string name="disconnect">Disconnect</string>
     <string name="signed_in_fmt">Signed in as: %s</string>
     <string name="edit_your_info">My Info</string>
+    <string name="fork">Fork</string>
 </resources>
