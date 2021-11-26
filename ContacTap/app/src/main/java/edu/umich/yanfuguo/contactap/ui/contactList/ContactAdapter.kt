@@ -1,6 +1,7 @@
 package edu.umich.yanfuguo.contactap.ui.contactList
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,11 @@ class ContactAdapter(context: Context, users: ArrayList<Contact?>) :
             listItemView.deleteButton.setOnClickListener{
                 delete(context, position)
                 notifyDataSetChanged()
+            }
+            listItemView.card.setOnClickListener{
+                val intent = Intent(context, ContactActivity::class.java)
+                intent.putExtra("position", position)
+                context.startActivity(intent)
             }
         }
 

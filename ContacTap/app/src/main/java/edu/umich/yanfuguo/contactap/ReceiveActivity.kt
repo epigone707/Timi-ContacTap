@@ -16,6 +16,7 @@ import com.google.gson.Gson
 import edu.umich.yanfuguo.contactap.model.ConnectionStore
 import edu.umich.yanfuguo.contactap.model.Contact
 import edu.umich.yanfuguo.contactap.nfc.NdefMessageParser
+import edu.umich.yanfuguo.contactap.ui.contactList.ContactActivity
 import edu.umich.yanfuguo.contactap.ui.contactList.ContactListActivity
 import edu.umich.yanfuguo.contactap.ui.profileList.ProfileActivity
 
@@ -34,7 +35,7 @@ open class ReceiveActivity : AppCompatActivity() {
                 ConnectionStore.init(this)
                 ConnectionStore.insert(this, Gson().fromJson(builder.toString(), Contact::class.java))
 
-                val _intent = Intent(this, ContactListActivity::class.java)
+                val _intent = Intent(this, ContactActivity::class.java)
                 val pendingIntent = PendingIntent.getActivity(this, 0, _intent, 0)
                 createNotificationChannel()
                 val notification_builder = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -43,6 +44,7 @@ open class ReceiveActivity : AppCompatActivity() {
                     .setContentText("New contact received!")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
                 // Issue the notification.
                 with(NotificationManagerCompat.from(this)) {
                     notify(0, notification_builder.build())
