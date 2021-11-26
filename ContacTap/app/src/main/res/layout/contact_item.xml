@@ -63,22 +63,34 @@
 
                 </LinearLayout>
                 <!-- Buttons -->
-                <RelativeLayout
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
+                    android:layout_margin="8dp"
                     android:orientation="horizontal">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/saveButton"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="48dp"
+                        android:paddingEnd="10dp"
+                        app:icon="@drawable/ic_baseline_save_alt_24" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/deleteButton"
                         style="?attr/borderlessButtonStyle"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="340dp"
-                        android:paddingRight="0dp"
-                        app:icon="@drawable/ic_baseline_delete_24"
-                        tools:ignore="SpeakableTextPresentCheck" />
-                </RelativeLayout>
+                        android:minWidth="48dp"
+                        app:icon="@drawable/ic_baseline_delete_24" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
