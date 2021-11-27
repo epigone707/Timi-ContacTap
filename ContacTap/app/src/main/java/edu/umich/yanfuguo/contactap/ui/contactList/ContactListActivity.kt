@@ -6,7 +6,7 @@ import edu.umich.yanfuguo.contactap.ReceiveActivity
 import edu.umich.yanfuguo.contactap.databinding.FragmentContactListBinding
 import edu.umich.yanfuguo.contactap.model.ConnectionStore.connections
 
-class ContactListActivity : ReceiveActivity() {
+class ContactListActivity : AppCompatActivity() {
     lateinit var contactListView: FragmentContactListBinding
     lateinit var contectAdapter: ContactAdapter
 

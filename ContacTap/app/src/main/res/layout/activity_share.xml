@@ -6,17 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".ui.ShareActivity">
 
+    <TextView
+        android:id="@+id/spinner_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Please select a profile to share:"
+        android:textSize="20sp"
+        />
+
+
     <Spinner
         android:id="@+id/profile_selector"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:drawablePadding="16dp"
         android:padding="12dp"
         android:background="@android:drawable/btn_dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_title"
         android:spinnerMode="dropdown"/>
 
     <com.google.android.material.card.MaterialCardView
@@ -24,11 +39,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:clickable="true"
         android:padding="12dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="9dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_selector"
@@ -56,6 +73,8 @@
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary" />
 
+
+
             <TextView
                 android:id="@+id/preview_text"
                 android:layout_width="wrap_content"
@@ -63,27 +82,58 @@
                 android:layout_marginTop="16dp"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fork_button"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="71dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/fork" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/edit_button"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    app:icon="@drawable/ic_baseline_edit_24" />
+
+            </LinearLayout>
         </LinearLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 
+
+
     <Button
         android:id="@+id/share_button"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_width="337dp"
+        android:layout_height="88dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/share_inactive"
+        android:onClick="toggleShare"
         android:text="@string/share"
         android:textSize="24sp"
-        android:onClick="toggleShare"
-        android:backgroundTint="@color/share_inactive"
         app:cornerRadius="1200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_card" />
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

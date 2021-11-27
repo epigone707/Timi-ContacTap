@@ -49,6 +49,7 @@ class ProfileListActivity: AppCompatActivity() {
             val description = data?.getStringExtra("description")
 
             if (name != null && description != null) {
+                //TODO: insert() is only used for local testing, change insert() to createProfile()
                 insert(this, Profile(name, "", description, "10000000000000"))
                 //createProfile(this,"10000000000000", name, description)
                 profileAdapter.notifyDataSetChanged()

@@ -38,6 +38,9 @@ object ConnectionStore {
         }
     }
 
+    /**
+     * store connections to the SharedPreference file
+     */
     fun commit(context: Context){
         val sharedPref: SharedPreferences =
             context.getSharedPreferences("contacts_data", Context.MODE_PRIVATE)
@@ -56,9 +59,17 @@ object ConnectionStore {
         commit(context)
     }
 
+    /**
+     * Communicate with Get Connections API
+     */
     fun getMyConnections(context: Context, completion: () -> Unit) {
-        val getRequest = JsonObjectRequest(
-            MyInfoStore.serverUrl +"connections/?id=$userId",
+        val jsonObj = mapOf(
+            "userId" to userId,
+        )
+        val postRequest = JsonObjectRequest(
+            Request.Method.POST,
+            MyInfoStore.serverUrl +"connections/",
+            JSONObject(jsonObj),
             { response ->
                 val received = try { response.getJSONArray("chatts") } catch (e: JSONException) { JSONArray() }
                 for (i in 0 until received.length()) {
@@ -87,10 +98,15 @@ object ConnectionStore {
         if (!MyInfoStore.isThingInitialized) {
             MyInfoStore.queue = Volley.newRequestQueue(context)
         }
-        MyInfoStore.queue.add(getRequest)
+        MyInfoStore.queue.add(postRequest)
     }
 
-    fun postConnection(context: Context, profileId: String, location: String) {
+    /**
+     * Create a new connection between a user and a profile.
+     * Happens after a successful contact exchange between two users.
+     * Communicate with Create Connection API
+     */
+    fun createConnection(context: Context, profileId: String, location: String) {
         val date = Calendar.getInstance().time
         val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
         val formatedDate = formatter.format(date)
@@ -102,9 +118,14 @@ object ConnectionStore {
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
-            MyInfoStore.serverUrl +"contactinfo/", JSONObject(jsonObj),
-            { Log.d("postMyInfo", " posted!") },
-            { error -> Log.e("postMyInfo", error.localizedMessage ?: "JsonObjectRequest error") }
+            MyInfoStore.serverUrl + "connection/create/", JSONObject(jsonObj),
+            { Log.d("createConnection", " posted!") },
+            { error ->
+                Log.e(
+                    "createConnection",
+                    error.localizedMessage ?: "JsonObjectRequest error"
+                )
+            }
         )
 
         if (!MyInfoStore.isThingInitialized) {

@@ -16,4 +16,5 @@ data class Contact (
     var linkedIn: String = "",
     var hobbies: String = "",
     var other: String = "",
+
 )

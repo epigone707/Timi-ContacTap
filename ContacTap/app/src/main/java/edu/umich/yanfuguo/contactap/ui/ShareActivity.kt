@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -17,19 +18,27 @@ import edu.umich.yanfuguo.contactap.R.color.share_active
 import edu.umich.yanfuguo.contactap.R.color.share_inactive
 import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
 import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedInfo
+import edu.umich.yanfuguo.contactap.model.Profile
+import edu.umich.yanfuguo.contactap.model.ProfileStore
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
 import edu.umich.yanfuguo.contactap.nfc.KHostApduService
 import edu.umich.yanfuguo.contactap.toast
+import edu.umich.yanfuguo.contactap.ui.profileList.ProfileActivity
 import org.json.JSONException
 import org.json.JSONObject
 
 class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private var isSharing = false
+
+    // the position of the selected profile in profiles
     private var selectedId = 0
+
     private lateinit var shareView: ActivityShareBinding
 
     private var mNfcAdapter: NfcAdapter? = null
     private lateinit var mTurnNfcDialog: AlertDialog
+
+    private lateinit var spinnerAdapter :ArrayAdapter<String?>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,20 +50,45 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             finish()
         }
 
+
+        shareView.editButton.setOnClickListener{
+            val intent = Intent(this, ProfileActivity::class.java)
+            Log.d("toggleEdit", "start ProfileActivity with position=$selectedId")
+            intent.putExtra("position", selectedId)
+            startActivity(intent)
+        }
+
         // add back (left arrow) button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         // init profile selection Spinner
         val items = profiles.map {p ->p?.name}
-        val adapter = ArrayAdapter(this, simple_spinner_dropdown_item, items)
-        shareView.profileSelector.adapter = adapter
+        spinnerAdapter = ArrayAdapter(this, simple_spinner_dropdown_item, items)
+        shareView.profileSelector.adapter = spinnerAdapter
         shareView.profileSelector.setSelection(
             intent.getIntExtra("profileId", selectedId))
         shareView.profileSelector.onItemSelectedListener = this
 
         // init NFC
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this)
+
+        shareView.forkButton.setOnClickListener{
+            val forkName = profiles[selectedId]?.name + "(fork)"
+            val forkDescription = "This profile is forked from ${profiles[selectedId]?.name}"
+
+            profiles[selectedId]?.includeBitString?.let { it1 ->
+                Profile(forkName, "", forkDescription, it1)
+            }?.let { it2 ->
+                //TODO: insert() is only used for local testing, change insert() to createProfile()
+                ProfileStore.insert(this, it2)
+            }
+            spinnerAdapter.clear()
+            val tempitems = profiles.map {p ->p?.name}
+            spinnerAdapter.addAll(tempitems)
+            spinnerAdapter.notifyDataSetChanged()
+            shareView.profileSelector.setSelection(profiles.size - 1)
+        }
     }
 
     private fun initNFCFunction(): Boolean {
@@ -160,4 +194,7 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             getColor(if(isSharing) share_active else share_inactive))
         shareView.shareButton.text = if (isSharing) "SHAREING" else "SHARE"
     }
+
+
+
 }
