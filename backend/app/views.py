@@ -6,58 +6,91 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import psycopg2
+import psycopg2.extras
 
-# Create your views here.
+
+# Helper function for checking idToken on requests
+def validateUser(idToken, clientId):
+    cursor = connection.cursor()
+
+    validLoginQuery = cursor.execute(
+        'SELECT * FROM logins WHERE idtoken = %s',
+        (idToken,)
+    )
+
+    validLogin = validLoginQuery.rowcount
+
+    # Need to renew token
+    if validLogin == 0:
+        try:
+            idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
+
+            userId = idInfo['sub']
+
+            validUserQuery = cursor.execute(
+                'SELECT * FROM logins WHERE userid = %s',
+                (userId,)
+            )
+            validUser = validUserQuery.rowcount
+
+            # No such user
+            if validUser == 0:
+                return False
+
+            cursor.execute(
+                'UPDATE logins SET idtoken = %s WHERE userid = %s',
+                (idToken, userId)
+            )
+        except ValueError:
+            # Invalid token
+            return False
+
+    # Token, user are both valid
+    return True
+
 @csrf_exempt
 def login(request):
     if request.method != 'POST':
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    clientID = json_data['clientID']   # the front end app's OAuth 2.0 Client ID
+    clientId = json_data['clientId']   # the front end app's OAuth 2.0 Client ID
     idToken = json_data['idToken']     # user's OpenID ID Token, a JSon Web Token (JWT)
-
-    now = time.time()                  # secs since epoch (1/1/70, 00:00:00 UTC)
+    displayName = json_data['displayName']
 
     try:
-        # Collect user info from the Google idToken, verify_oauth2_token checks
-        # the integrity of idToken and throws a "ValueError" if idToken or
-        # clientID is corrupted or if user has been disconnected from Google
-        # OAuth (requiring user to log back in to Google).
-        # idToken has a lifetime of about 1 hour
-        idinfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientID)
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+        userId = idInfo['sub']
+
+        cursor = connection.cursor()
+        cursor.execute(
+            'SELECT * FROM logins WHERE userid = %s',
+            (userId,)
+        )
+
+        hasLogin = cursor.rowcount
+    
+        if hasLogin == 1:
+            cursor.execute(
+                'UPDATE logins SET idtoken = %s WHERE userid = %s',
+                (idToken, userId)
+            )
+        else:
+            cursor.execute(
+                'INSERT INTO logins (userid, idtoken, username) VALUES (%s, %s, %s)',
+                (userId, idToken, displayName)
+            )
+    
+        return JsonResponse({})
     except ValueError:
-        # Invalid or expired token
-        return HttpResponse(status=511)  # 511 Network Authentication Required
-
-    # get username
-    try:
-        username = idinfo['name']
-    except:
-        username = "Profile NA"
-
-    # Compute userID and add to database
-    backendSecret = "giveamouseacookie"   # or server's private key
-    nonce = str(now)
-    hashable = idToken + backendSecret + nonce
-    userID = hashlib.sha256(hashable.strip().encode('utf-8')).hexdigest()
-
-    # Lifetime of userID is min of time to idToken expiration
-    # (int()+1 is just ceil()) and target lifetime, which should
-    # be less than idToken lifetime (~1 hour).
-    lifetime = min(int(idinfo['exp']-now)+1, 60) # secs, up to idToken's lifetime
-
-    cursor = connection.cursor()
-    # clean up db table of expired chatterIDs
-    cursor.execute('DELETE FROM chatters WHERE %s > expiration;', (now, ))
-
-    # insert new userID
-    # Ok for userID to expire about 1 sec beyond idToken expiration
-    cursor.execute('INSERT INTO Logins (userid, username, expiration) VALUES '
-                   '(%s, %s, %s);', (userID, username, now+lifetime))
-
-    # Return userID and its lifetime
-    return JsonResponse({'userID': userID, 'lifetime': lifetime})
+        # Invalid token
+        return HttpResponse(status=401)
 
 # Get ContactInfo: /contactinfo/
 @csrf_exempt
@@ -324,17 +357,18 @@ def deleteprofile(request):
 def createconnection(request):
     if request.method != 'POST':
         return HttpResponse(status=404)
-    
+
     json_data = json.loads(request.body)
     userId = json_data['userId']
     profileId = json_data['profileId']
     location = json_data['location']
     time = json_data['time']
+    newIncludeBitString = json_data['newIncludeBitString']
 
     cursor = connection.cursor()
     cursor.execute(
-        'INSERT INTO connections (userid, profileid, timeshared, locationshared) '
-        'VALUES (%s, %s, %s, %s);', (userId, profileId, time, location)
+        'INSERT INTO connections (userid, profileid, timeshared, locationshared, newincludebitstring) '
+        'VALUES (%s, %s, %s, %s, %s);', (userId, profileId, time, location, newIncludeBitString)
     )
 
     return JsonResponse({})
@@ -359,32 +393,71 @@ def deleteconnection(request):
 def getconnections(request):
     if request.method != 'POST':
         return HttpResponse(status=404)
-    
+
     json_data = json.loads(request.body)
     userId = json_data['userId']
 
     cursor = connection.cursor()
+
+    #Do join between connections table and profiles table
+    #c.userId means my receiver's userId, p.userId means sender's userId
     cursor.execute(
-        'SELECT * FROM connections c INNER JOIN profiles p '
-        'ON c.profileId = p.profileId WHERE c.userId = %s;', (userId,))
+            'SELECT * FROM connections c INNER JOIN profiles p'
+            ' USING (profileid)'                                 #avoid join based on two userIds in two tables
+            " WHERE c.userId = %s;", (userId,))
 
-    rows = cursor.fetchall()
-    
-    connections = []
-    for row in rows:
-        connection = {}
-        connection['name']
-        connection['imageUrl']
-        connection['personalEmail']
-        connection['businessEmail']
-        connection['personalPhone']
-        connection['businessPhone']
-        connection['otherPhone']
-        connection['bio']
+    #For each row of joining result, 
+    #     check if newincludebitstring is null
+    #     if it is null, extract information from (BasicInfo join ContactInfo join SocialInfo) based on includebitstring column in profile table
+    #     if it is not null, extract information from (BasicInfo join ContactInfo join SocialInfo) based on newincludebitstring column in connections table
+    rows_connection_join_profiles = cursor.fetchall()
 
+    #all profiles in response (that contain extracted actual info)
+    all_profiles_in_response = []
+
+    fourteen_information_name_in_response = ('name', 'imageUrl', 'personalEmail', 'businessEmail', 'personalPhone',
+        'businessPhone', 'otherPhone', 'bio', 'instagram', 'snapchat',
+        'twitter', 'linkedIn', 'hobbies', 'other', 
+        )
+   
+    '''
+    fourteen_information_name_in_postgresql_database = ('name', 'imageUrl', 'personalEmail', 'businessEmail', 'personalPhone',
+        'businessPhone', 'otherPhone', 'bio', 'instagram', 'snapchat',
+        'twitter', 'linkedIn', 'hobbies', 'other', 
+        )     #TODO: make sure it is align with database/github wiki
+    '''
+
+    fourteen_information_name_in_postgresql_database = (4, 5, 6, 7, 8,
+        9, 10, 11, 13, 14,
+        15, 16, 17, 18,
+        )
+
+    for row in rows_connection_join_profiles:
+        profile_in_response = {}
+
+        #Do BasicInfo join ContactInfo join SocialInfo
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            'SELECT * FROM contactinfo c '
+            'INNER JOIN basicinfo b ON c.basicinfoid = b.basicinfoid '
+            'INNER JOIN socialinfo s on c.socialinfoid = s.socialinfoid '
+            "WHERE userid = %s;",
+            (row[5],)             #maybe TODO: maybe I need to change to the index that should I use in p.userId (i.e. sender/other's userId)
+        )
+        row_BasicInfo_join_ContactInfo_join_SocialInfo = cursor2.fetchone()
+
+        if row[4] == "":
+            for i in range(len(row[8])):     #iterate through every bit of includebitstring
+                if row[8][i] == '1':
+                    profile_in_response[fourteen_information_name_in_response[i]] = row_BasicInfo_join_ContactInfo_join_SocialInfo[fourteen_information_name_in_postgresql_database[i]]       
+        else:
+            for i in range(len(row[4])):     #iterate through every bit of newincludebitstring
+                if row[4][i] == '1':
+                    profile_in_response[fourteen_information_name_in_response[i]] = row_BasicInfo_join_ContactInfo_join_SocialInfo[fourteen_information_name_in_postgresql_database[i]]       
+
+        all_profiles_in_response.append(profile_in_response)
 
     response = {}
-
-    response['connections'] = connections
+    response['connections'] = all_profiles_in_response
 
     return JsonResponse(response)
