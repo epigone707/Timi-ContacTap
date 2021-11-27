@@ -15,6 +15,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import edu.umich.yanfuguo.contactap.R
 import android.util.Log
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.getOverview
 
 
 class HomeFragment : Fragment() {
@@ -30,22 +31,9 @@ class HomeFragment : Fragment() {
     ): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
         fragmentHomeBinding = binding
-        val info = myInfo
-        val obj = try { JSONObject(Gson().toJson(info)) } catch (e: JSONException) { JSONObject() }
-        var preview = ""
-        obj.keys().forEach { k->
-            try {
-                if (obj.getString(k).isNotEmpty()){
-                    preview += "$k: ${obj.getString(k)}\n"
-                }else{
-                    Log.d("HomeFragment","empty")
-                }
-
-            } catch (e: JSONException) {
-                Log.e("HomeFragment","JSONException")
-            }
-        }
+        val preview = getOverview()
         Log.d("HomeFragment",preview)
+        binding.cardTitle.text = myInfo.name
         binding.cardInfo.text = preview.removeSuffix("\n")
         binding.cardView.setOnClickListener{
             val intent = Intent(activity, ContactInfoActivity::class.java)

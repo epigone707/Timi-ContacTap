@@ -40,11 +40,12 @@
 
         <TextView
             android:id="@+id/card_info"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:textSize="15sp"
+            android:layout_marginStart="14dp"
             android:layout_marginTop="14dp"
+            android:fontFamily="sans-serif"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/card_title"
             app:layout_constraintTop_toBottomOf="@+id/card_title"
             android:textColor="@color/white"

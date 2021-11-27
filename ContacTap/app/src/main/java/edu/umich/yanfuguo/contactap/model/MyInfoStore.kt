@@ -11,10 +11,27 @@ import com.android.volley.toolbox.Volley
 import com.android.volley.toolbox.Volley.newRequestQueue
 import com.google.gson.Gson
 import edu.umich.yanfuguo.contactap.databinding.ActivityContactInfoBinding
+import org.json.JSONException
 import org.json.JSONObject
 
 object MyInfoStore {
     var myInfo: Contact = Contact()
+
+    val InfoKeys: Array<String> =  arrayOf(
+    "name",
+    "imageUrl",
+    "personalEmail",
+    "businessEmail",
+    "personalPhone",
+    "businessPhone",
+    "otherPhone",
+    "bio",
+    "instagram",
+    "snapchat",
+    "twitter",
+    "linkedIn",
+    "hobbies",
+    "other",)
 
     lateinit var queue: RequestQueue
     val isThingInitialized get() = this::queue.isInitialized
@@ -46,6 +63,9 @@ object MyInfoStore {
         ed.putString("my_info_data", Gson().toJson(myInfo))
         ed.apply()
     }
+
+
+
 
     /**
      * Get user's contact info from the server and
@@ -207,7 +227,68 @@ object MyInfoStore {
         commit(context)
     }
 
-    fun getMaskedInfo(profile: Profile?) : Contact {
-        return myInfo
+    /**
+     * generate an overview of the user's info
+     * return a string
+     * used in home screen(HomeFragment)
+     */
+    fun getOverview():String{
+        val obj = try { JSONObject(Gson().toJson(myInfo)) } catch (e: JSONException) { JSONObject() }
+        var preview = ""
+        val keys =  arrayOf("personalEmail", "businessEmail", "personalPhone","businessPhone",)
+        try{
+            if(obj.getString("bio").isNotEmpty()){
+                preview += "${obj.getString("bio")}\n\n"
+            }else{
+                Log.d("HomeFragment","bio empty")
+            }
+            keys.forEach { k ->
+                if (obj.getString(k).isNotEmpty()) {
+                    preview += "$k: ${obj.getString(k)}\n"
+                } else {
+                    Log.d("HomeFragment", "getOverview empty")
+                }
+            }
+        }catch (e: JSONException) {
+            Log.e("HomeFragment","getOverview JSONException")
+        }
+        if (preview.length < 40){
+            preview += "\nClick this card to add more info!"
+        }
+        return preview
+    }
+
+    /**
+     * return a JSONObject that contains real data of a profile instead of bitstring
+     * used in share screen(ShareActivity)
+     */
+    fun getMaskedInfo(profile: Profile?) : JSONObject {
+        val obj = try { JSONObject(Gson().toJson(myInfo)) } catch (e: JSONException) { JSONObject() }
+        if (profile != null) {
+            for (idx in profile.includeBitString.indices) {
+                if(profile.includeBitString[idx] =='0'){
+                    obj.remove(InfoKeys[idx])
+                }
+            }
+        }
+        return obj
+    }
+
+    /**
+     * generate an overview of a profile
+     * return a string
+     * used in share screen(ShareActivity)
+     */
+    fun getMaskedOverview(profile: Profile?):String {
+        var preview = ""
+        val obj = try { JSONObject(Gson().toJson(myInfo)) } catch (e: JSONException) { JSONObject() }
+        if (profile != null) {
+            for (idx in profile.includeBitString.indices) {
+                if(profile.includeBitString[idx] =='1'){
+                    preview += "${InfoKeys[idx]}: ${obj.getString(InfoKeys[idx])}\n"
+                }
+            }
+        }
+        return preview
     }
 }
