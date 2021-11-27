@@ -13,32 +13,37 @@ import psycopg2.extras
 
 
 # Helper function for checking idToken on requests
+# Returns userId on sucess, empty string on fail
 def validateUser(idToken, clientId):
+    userId = ''
     cursor = connection.cursor()
 
-    validLoginQuery = cursor.execute(
-        'SELECT * FROM logins WHERE idtoken = %s',
+    cursor.execute(
+        'SELECT userid FROM logins WHERE idtoken = %s',
         (idToken,)
     )
 
-    validLogin = validLoginQuery.rowcount
+    validLoginData = cursor.fetchone()
+
+    if len(validLoginData) > 0:
+        userId = validLoginData[0]
 
     # Need to renew token
-    if validLogin == 0:
+    if userId is None:
         try:
             idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
 
             userId = idInfo['sub']
 
-            validUserQuery = cursor.execute(
+            cursor.execute(
                 'SELECT * FROM logins WHERE userid = %s',
                 (userId,)
             )
-            validUser = validUserQuery.rowcount
+            validUser = cursor.rowcount
 
             # No such user
             if validUser == 0:
-                return False
+                return ''
 
             cursor.execute(
                 'UPDATE logins SET idtoken = %s WHERE userid = %s',
@@ -46,10 +51,10 @@ def validateUser(idToken, clientId):
             )
         except ValueError:
             # Invalid token
-            return False
+            return ''
 
     # Token, user are both valid
-    return True
+    return userId
 
 @csrf_exempt
 def login(request):
@@ -61,45 +66,50 @@ def login(request):
     idToken = json_data['idToken']     # user's OpenID ID Token, a JSon Web Token (JWT)
     displayName = json_data['displayName']
 
-    try:
-        # Specify the CLIENT_ID of the app that accesses the backend:
-        idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
+    # Specify the CLIENT_ID of the app that accesses the backend:
+    idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
 
-        # ID token is valid. Get the user's Google Account ID from the decoded token.
-        userId = idInfo['sub']
+    # ID token is valid. Get the user's Google Account ID from the decoded token.
+    userId = idInfo['sub']
 
-        cursor = connection.cursor()
+    cursor = connection.cursor()
+    cursor.execute(
+        'SELECT * FROM logins WHERE userid = %s',
+        (userId,)
+    )
+
+    hasLogin = cursor.rowcount
+    
+    if hasLogin == 1:
         cursor.execute(
-            'SELECT * FROM logins WHERE userid = %s',
-            (userId,)
+            'UPDATE logins SET idtoken = %s WHERE userid = %s',
+            (idToken, userId)
         )
-
-        hasLogin = cursor.rowcount
+    else:
+        cursor.execute(
+             'INSERT INTO logins (userid, idtoken, username) VALUES (%s, %s, %s)',
+            (userId, idToken, displayName)
+         )
     
-        if hasLogin == 1:
-            cursor.execute(
-                'UPDATE logins SET idtoken = %s WHERE userid = %s',
-                (idToken, userId)
-            )
-        else:
-            cursor.execute(
-                'INSERT INTO logins (userid, idtoken, username) VALUES (%s, %s, %s)',
-                (userId, idToken, displayName)
-            )
-    
-        return JsonResponse({})
-    except ValueError:
-        # Invalid token
-        return HttpResponse(status=401)
+    return JsonResponse({})
+    #except ValueError:
+    # Invalid token
+    #return HttpResponse(status=401)
 
 # Get ContactInfo: /contactinfo/
 @csrf_exempt
 def getcontactinfo(request):
     if request.method != 'POST':
-        return HttpResponse(status=400)
+       return HttpResponse(status=400)
     
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
 
     cursor = connection.cursor()
     # Get user's contact info, split across these three tables
@@ -145,7 +155,14 @@ def createcontactinfo(request):
         return HttpResponse(status=400)
     
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
+
     name = json_data['name']
     personalEmail = json_data['personalEmail']
     businessEmail = json_data['businessEmail'] or None
@@ -210,7 +227,14 @@ def updatecontactinfo(request):
         return HttpResponse(status=400)
     
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
+
     name = json_data['name']
     personalEmail = json_data['personalEmail']
     businessEmail = json_data['businessEmail'] or None
@@ -273,7 +297,13 @@ def getprofiles(request):
         return HttpResponse(status=400)
 
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+    
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
 
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM profiles WHERE userid = %s;', (userId,))
@@ -285,7 +315,8 @@ def getprofiles(request):
         profile = {}
         profile['profileId'] = row[1]
         profile['name'] = row[2]
-        profile['includeBitString'] = row[3]
+        profile['description'] = row[3]
+        profile['includeBitString'] = row[4]
         profiles.append(profile)
 
     response = {}
@@ -300,14 +331,22 @@ def createprofile(request):
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+    
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
+
     includeBitString = json_data['includeBitString']
     profileName = json_data['profileName']
+    description = json_data['description']
 
     cursor = connection.cursor()
     cursor.execute(
-        'INSERT INTO profiles (UserId, ProfileName, IncludeBitString) VALUES '
-        '(%s, %s, %s) RETURNING ProfileId;', (userId, profileName, includeBitString)
+        'INSERT INTO profiles (UserId, ProfileName, IncludeBitString, profiledescription) VALUES '
+        '(%s, %s, %s, %s) RETURNING ProfileId;', (userId, profileName, includeBitString, description)
     )
     profileId = cursor.fetchone()[0]
     
@@ -323,16 +362,24 @@ def updateprofile(request):
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+    
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
+
     profileName = json_data['profileName']
     profileId = json_data['profileId']
     includeBitString = json_data['includeBitString']
+    description = json_data['description']
     
     cursor = connection.cursor()
     cursor.execute(
-        'UPDATE profiles SET ProfileName = %s, IncludeBitString = %s '
+        'UPDATE profiles SET ProfileName = %s, IncludeBitString = %s, profiledescription = %s '
         'WHERE UserId = %s AND ProfileId = %s;',
-        (profileName, includeBitString, userId, profileId)
+        (profileName, includeBitString, description, userId, profileId)
     )
 
     return JsonResponse({'Success message': "Update profile successfully"})
@@ -344,7 +391,14 @@ def deleteprofile(request):
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+    
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
+
     profileId = json_data['profileId']
 
     cursor = connection.cursor()
@@ -359,7 +413,14 @@ def createconnection(request):
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+    
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
+
     profileId = json_data['profileId']
     location = json_data['location']
     time = json_data['time']
@@ -380,7 +441,14 @@ def deleteconnection(request):
         return HttpResponse(status=404)
     
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+    
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
+
     profileId = json_data['profileId']
 
     cursor = connection.cursor()
@@ -395,7 +463,13 @@ def getconnections(request):
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    userId = json_data['userId']
+    
+    idToken = json_data['idToken']
+    clientId = json_data['clientId']
+    userId = validateUser(idToken, clientId)
+
+    if userId is None:
+        return HttpException(status=401)
 
     cursor = connection.cursor()
 
