@@ -153,6 +153,9 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.checkbox_name -> {
                     checkHelper(checked,0)
                 }
+                R.id.checkbox_image -> {
+                    checkHelper(checked,1)
+                }
                 R.id.checkbox_p_email -> {
                     checkHelper(checked,2)
                 }
