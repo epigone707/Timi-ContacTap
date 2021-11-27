@@ -18,7 +18,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.R
-import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
+import edu.umich.yanfuguo.contactap.databinding.ActivityContactInfoBinding
 import edu.umich.yanfuguo.contactap.display
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
 import edu.umich.yanfuguo.contactap.model.MyInfoStore.myInfo
@@ -26,14 +26,14 @@ import edu.umich.yanfuguo.contactap.toast
 
 class ContactInfoActivity : AppCompatActivity() {
 
-    private lateinit var contactInfoView: FragmentContactInfoBinding
+    private lateinit var contactInfoView: ActivityContactInfoBinding
 
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        contactInfoView = FragmentContactInfoBinding.inflate(layoutInflater)
+        contactInfoView = ActivityContactInfoBinding.inflate(layoutInflater)
         setContentView(contactInfoView.root)
 
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->

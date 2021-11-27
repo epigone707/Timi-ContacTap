@@ -10,7 +10,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.android.volley.toolbox.Volley.newRequestQueue
 import com.google.gson.Gson
-import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
+import edu.umich.yanfuguo.contactap.databinding.ActivityContactInfoBinding
 import org.json.JSONObject
 
 object MyInfoStore {
@@ -167,7 +167,7 @@ object MyInfoStore {
     }
 
 
-    fun updateContent(contactInfoView: FragmentContactInfoBinding) : Uri? {
+    fun updateContent(contactInfoView: ActivityContactInfoBinding) : Uri? {
         val imageUri = if (myInfo.imageUrl != null) {
             val uri = Uri.parse(myInfo.imageUrl)
             contactInfoView.previewImage.setImageURI(uri)
@@ -189,7 +189,7 @@ object MyInfoStore {
         return imageUri
     }
 
-    fun saveContent(context: Context, contactInfoView: FragmentContactInfoBinding, imageUri: Uri?) {
+    fun saveContent(context: Context, contactInfoView: ActivityContactInfoBinding, imageUri: Uri?) {
         imageUri?.let { myInfo.imageUrl = it.toString() }
         contactInfoView.contactNameEdit.text?.let { myInfo.name = it.toString() }
         contactInfoView.contactPersonalPhoneEdit.text?.let{ myInfo.personalPhone = it.toString() }

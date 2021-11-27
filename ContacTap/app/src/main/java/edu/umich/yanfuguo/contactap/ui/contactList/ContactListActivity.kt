@@ -3,16 +3,16 @@ package edu.umich.yanfuguo.contactap.ui.contactList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.yanfuguo.contactap.ReceiveActivity
-import edu.umich.yanfuguo.contactap.databinding.FragmentContactListBinding
+import edu.umich.yanfuguo.contactap.databinding.ActivityContactListBinding
 import edu.umich.yanfuguo.contactap.model.ConnectionStore.connections
 
 class ContactListActivity : AppCompatActivity() {
-    lateinit var contactListView: FragmentContactListBinding
+    lateinit var contactListView: ActivityContactListBinding
     lateinit var contectAdapter: ContactAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        contactListView = FragmentContactListBinding.inflate(layoutInflater)
+        contactListView = ActivityContactListBinding.inflate(layoutInflater)
         setContentView(contactListView.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -15,19 +15,19 @@
         android:id="@+id/nav_contact_info"
         android:name="edu.umich.yanfuguo.contactap.ui.ContactInfoActivity"
         android:label="@string/menu_contact_info"
-        tools:layout="@layout/fragment_contact_info" />
+        tools:layout="@layout/activity_contact_info" />
 
     <activity
         android:id="@+id/nav_profiles"
         android:name="edu.umich.yanfuguo.contactap.ui.profileList.ProfileListActivity"
         android:label="@string/menu_profiles"
-        tools:layout="@layout/fragment_profile_list" />
+        tools:layout="@layout/activity_profile_list" />
 
     <activity
         android:id="@+id/nav_contacts"
         android:name="edu.umich.yanfuguo.contactap.ui.contactList.ContactListActivity"
         android:label="@string/menu_contacts"
-        tools:layout="@layout/fragment_contact_list" />
+        tools:layout="@layout/activity_contact_list" />
 
     <activity
         android:id="@+id/nav_share"

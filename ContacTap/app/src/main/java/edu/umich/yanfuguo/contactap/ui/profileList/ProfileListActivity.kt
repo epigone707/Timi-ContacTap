@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import edu.umich.yanfuguo.contactap.databinding.FragmentProfileListBinding
+import edu.umich.yanfuguo.contactap.databinding.ActivityProfileListBinding
 import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.model.ProfileStore.createProfile
 import edu.umich.yanfuguo.contactap.model.ProfileStore.insert
@@ -13,11 +13,11 @@ import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
 
 class ProfileListActivity: AppCompatActivity() {
     private lateinit var profileAdapter: ProfileAdapter
-    private lateinit var binding: FragmentProfileListBinding
+    private lateinit var binding: ActivityProfileListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentProfileListBinding.inflate(layoutInflater)
+        binding = ActivityProfileListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
