@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-_91=@^8h-818j6c(vy&7kcmdg2+*1v9v&mhbzaucf9-ysngcmu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.142.95.174', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['www.contactap.xyz', '3.142.95.174', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -127,6 +127,6 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-MEDIA_URL = 'https://3.142.95.174/media/'
+MEDIA_URL = 'https://www.contactap.xyz/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
