@@ -18,6 +18,8 @@
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/drawable/roundcorner.xml" value="0.28615384615384615" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/drawable/side_nav_bar.xml" value="0.14583333333333334" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/activity_add_profile.xml" value="0.27447916666666666" />
+        <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/activity_contact.xml" value="0.1890625" />
+        <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/activity_contact_info.xml" value="0.27447916666666666" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/activity_contact_list.xml" value="0.22916666666666666" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/activity_profile.xml" value="0.27447916666666666" />
@@ -31,6 +33,7 @@
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/content_main.xml" value="0.264" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/fragment_blank.xml" value="0.264" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/fragment_contact_info.xml" value="0.24259259259259258" />
+        <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/fragment_contact_list.xml" value="0.1890625" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/fragment_gallery.xml" value="0.264" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/layout/fragment_profile_list.xml" value="0.25364583333333335" />
@@ -40,12 +43,9 @@
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/menu/activity_main_drawer.xml" value="0.2" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/menu/main.xml" value="0.264" />
         <entry key="..\:/myprogram/441/Timi-ContacTap/ContacTap/app/src/main/res/menu/menu_contact_info.xml" value="0.27447916666666666" />
-        <entry key="app/src/main/res/layout/activity_contact.xml" value="0.23072916666666668" />
         <entry key="app/src/main/res/layout/activity_contact_info.xml" value="0.3446557971014493" />
         <entry key="app/src/main/res/layout/activity_contact_list.xml" value="0.21979166666666666" />
-        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.23072916666666668" />
         <entry key="app/src/main/res/layout/activity_profile_list.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_receive.xml" value="0.23072916666666668" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.21979166666666666" />
         <entry key="app/src/main/res/layout/fragment_contact_info.xml" value="0.3446557971014493" />
         <entry key="app/src/main/res/layout/fragment_contact_list.xml" value="0.21979166666666666" />

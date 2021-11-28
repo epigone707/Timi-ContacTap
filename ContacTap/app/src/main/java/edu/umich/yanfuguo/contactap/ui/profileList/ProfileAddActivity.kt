@@ -28,7 +28,7 @@ class ProfileAddActivity : AppCompatActivity() {
     private fun addProfile() {
         val resultIntent = Intent()
 
-        if (view.name.text.isNullOrEmpty() || view.description.text.isNullOrEmpty()) {
+        if (view.name.text.isNullOrEmpty()) {
             setResult(Activity.RESULT_CANCELED, resultIntent)
         } else {
             val profileName = view.name.text.toString()

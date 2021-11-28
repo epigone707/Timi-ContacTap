@@ -17,4 +17,7 @@ data class Contact (
     var hobbies: String = "",
     var other: String = "",
 
+
+
+
 )

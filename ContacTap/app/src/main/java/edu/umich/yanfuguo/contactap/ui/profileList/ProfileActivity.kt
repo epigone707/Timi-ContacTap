@@ -40,11 +40,13 @@ class ProfileActivity : AppCompatActivity() {
             profileView.profileImage.setImageBitmap(null)
 
         }
+        // initialize all checkboxes
         for(i in 0..13){
             current_profile?.includeBitString?.let { initCheckBoxes(i, it[i]) }
         }
 
-        // basic
+        // show the value of each field
+        // basic info
         profileView.checkboxName.text = MyInfoStore.myInfo.name
         profileView.checkboxBEmail.text = MyInfoStore.myInfo.businessEmail
         profileView.checkboxPEmail.text = MyInfoStore.myInfo.personalEmail
@@ -73,7 +75,12 @@ class ProfileActivity : AppCompatActivity() {
         return true
     }
 
-    fun initCheckBoxes(index:Int,bit:Char){
+    /**
+     * initialize a checkbox
+     * @param index checkbox index
+     * @param bit a char that can be '0' or '1', indicating whether to include this field in the profile
+     */
+    private fun initCheckBoxes(index:Int,bit:Char){
         if(index <0 || index >13){
             Log.d("initCheckBoxes","out of index")
         }
@@ -128,7 +135,10 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    fun checkHelper(checked: Boolean,index: Int){
+    /**
+     * helper function of onCheckboxClicked
+     */
+    private fun checkHelper(checked: Boolean, index: Int){
         if(index <0 || index >13){
             Log.d("checkHelper","out of index")
         }
@@ -136,14 +146,21 @@ class ProfileActivity : AppCompatActivity() {
             var string = current_profile?.includeBitString
             string = string?.substring(0, index) + '1' + string?.substring(index + 1)
             current_profile?.includeBitString = string
+
         } else {
             var string = current_profile?.includeBitString
             string = string?.substring(0, index) + '0' + string?.substring(index + 1)
             current_profile?.includeBitString = string
         }
+        // update the profile in both local storage and back end
+        //TODO: commit() is only used for local testing, change commit() to updateProfile()
+        ProfileStore.commit(this)
 
     }
 
+    /**
+     * callback function of all checkboxes
+     */
     fun onCheckboxClicked(view: View) {
 
         if (view is CheckBox) {
@@ -152,6 +169,9 @@ class ProfileActivity : AppCompatActivity() {
             when (view.id) {
                 R.id.checkbox_name -> {
                     checkHelper(checked,0)
+                }
+                R.id.checkbox_image -> {
+                    checkHelper(checked,1)
                 }
                 R.id.checkbox_p_email -> {
                     checkHelper(checked,2)

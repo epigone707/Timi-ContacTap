@@ -10,17 +10,33 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.android.volley.toolbox.Volley.newRequestQueue
 import com.google.gson.Gson
-import edu.umich.yanfuguo.contactap.databinding.FragmentContactInfoBinding
+import edu.umich.yanfuguo.contactap.databinding.ActivityContactInfoBinding
+import org.json.JSONException
 import org.json.JSONObject
 
 object MyInfoStore {
     var myInfo: Contact = Contact()
 
+    val InfoKeys: Array<String> =  arrayOf(
+    "name",
+    "imageUrl",
+    "personalEmail",
+    "businessEmail",
+    "personalPhone",
+    "businessPhone",
+    "otherPhone",
+    "bio",
+    "instagram",
+    "snapchat",
+    "twitter",
+    "linkedIn",
+    "hobbies",
+    "other",)
+
     lateinit var queue: RequestQueue
     val isThingInitialized get() = this::queue.isInitialized
 
-    //TODO
-    const val serverUrl = "exmaple/"
+    const val serverUrl = "3.142.95.174/"
 
 
     var userId = ""
@@ -46,6 +62,9 @@ object MyInfoStore {
         ed.putString("my_info_data", Gson().toJson(myInfo))
         ed.apply()
     }
+
+
+
 
     /**
      * Get user's contact info from the server and
@@ -167,7 +186,10 @@ object MyInfoStore {
     }
 
 
-    fun updateContent(contactInfoView: FragmentContactInfoBinding) : Uri? {
+    /**
+     * update the view
+     */
+    fun updateContent(contactInfoView: ActivityContactInfoBinding) : Uri? {
         val imageUri = if (myInfo.imageUrl != null) {
             val uri = Uri.parse(myInfo.imageUrl)
             contactInfoView.previewImage.setImageURI(uri)
@@ -189,7 +211,7 @@ object MyInfoStore {
         return imageUri
     }
 
-    fun saveContent(context: Context, contactInfoView: FragmentContactInfoBinding, imageUri: Uri?) {
+    fun saveContent(context: Context, contactInfoView: ActivityContactInfoBinding, imageUri: Uri?) {
         imageUri?.let { myInfo.imageUrl = it.toString() }
         contactInfoView.contactNameEdit.text?.let { myInfo.name = it.toString() }
         contactInfoView.contactPersonalPhoneEdit.text?.let{ myInfo.personalPhone = it.toString() }
@@ -204,10 +226,72 @@ object MyInfoStore {
         contactInfoView.contactHobbiesEdit.text?.let{ myInfo.hobbies = it.toString() }
         contactInfoView.contactOtherinfoEdit.text?.let{ myInfo.other = it.toString() }
         contactInfoView.contactBioEdit.text?.let{ myInfo.bio = it.toString() }
+        // TODO: commit() is only used for local testing
         commit(context)
     }
 
-    fun getMaskedInfo(profile: Profile?) : Contact {
-        return myInfo
+    /**
+     * generate an overview of the user's info
+     * return a string
+     * used in home screen(HomeFragment)
+     */
+    fun getOverview():String{
+        val obj = try { JSONObject(Gson().toJson(myInfo)) } catch (e: JSONException) { JSONObject() }
+        var preview = ""
+        val keys =  arrayOf("personalEmail", "businessEmail", "personalPhone","businessPhone",)
+        try{
+            if(obj.getString("bio").isNotEmpty()){
+                preview += "${obj.getString("bio")}\n\n"
+            }else{
+                Log.d("HomeFragment","bio empty")
+            }
+            keys.forEach { k ->
+                if (obj.getString(k).isNotEmpty()) {
+                    preview += "$k: ${obj.getString(k)}\n"
+                } else {
+                    Log.d("HomeFragment", "getOverview empty")
+                }
+            }
+        }catch (e: JSONException) {
+            Log.e("HomeFragment","getOverview JSONException")
+        }
+        if (preview.length < 40){
+            preview += "\nClick this card to add more info!"
+        }
+        return preview
+    }
+
+    /**
+     * return a JSONObject that contains real data of a profile instead of bitstring
+     * used in share screen(ShareActivity)
+     */
+    fun getMaskedInfo(profile: Profile?) : String {
+        val obj = try { JSONObject(Gson().toJson(myInfo)) } catch (e: JSONException) { JSONObject() }
+        if (profile != null) {
+            for (idx in profile.includeBitString.indices) {
+                if(profile.includeBitString[idx] =='0'){
+                    obj.put(InfoKeys[idx], "")
+                }
+            }
+        }
+        return obj.toString()
+    }
+
+    /**
+     * generate an overview of a profile
+     * return a string
+     * used in share screen(ShareActivity)
+     */
+    fun getMaskedOverview(profile: Profile?):String {
+        var preview = ""
+        val obj = try { JSONObject(Gson().toJson(myInfo)) } catch (e: JSONException) { JSONObject() }
+        if (profile != null) {
+            for (idx in profile.includeBitString.indices) {
+                if(profile.includeBitString[idx] =='1'){
+                    preview += "${InfoKeys[idx]}: ${obj.getString(InfoKeys[idx])}\n"
+                }
+            }
+        }
+        return preview
     }
 }

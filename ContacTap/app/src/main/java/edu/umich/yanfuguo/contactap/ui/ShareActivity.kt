@@ -1,6 +1,7 @@
 package edu.umich.yanfuguo.contactap.ui
 
 import android.R.layout.simple_spinner_dropdown_item
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,6 +19,7 @@ import edu.umich.yanfuguo.contactap.R.color.share_active
 import edu.umich.yanfuguo.contactap.R.color.share_inactive
 import edu.umich.yanfuguo.contactap.databinding.ActivityShareBinding
 import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedInfo
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedOverview
 import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.model.ProfileStore
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
@@ -106,7 +108,7 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         // gen message
         val info = getMaskedInfo(profiles[selectedId])
-        intent.putExtra("ndefMessage", Gson().toJson(info))
+        intent.putExtra("ndefMessage", info)
 
         // toggle service
         if(enable) {
@@ -164,16 +166,7 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         shareView.headerTitle.text = profiles[selectedId]?.name
         shareView.headerSubtitle.text = profiles[selectedId]?.description
 
-        // gen preview
-        val info = getMaskedInfo(profiles[selectedId])
-        val obj = try { JSONObject(Gson().toJson(info)) } catch (e: JSONException) { JSONObject() }
-        var preview = ""
-        obj.keys().forEach { k->
-            try {
-                if (obj.getString(k).isNotEmpty())
-                    preview += "$k: ${obj.getString(k)}\n"
-            } catch (e: JSONException) {}
-        }
+        var preview = getMaskedOverview(profiles[selectedId])
         shareView.previewText.text = preview.removeSuffix("\n")
     }
 
@@ -195,6 +188,10 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         shareView.shareButton.text = if (isSharing) "SHAREING" else "SHARE"
     }
 
-
-
+    override fun onResume() {  // After a pause OR at startup
+        super.onResume()
+        //Refresh your stuff here
+        val preview = getMaskedOverview(profiles[selectedId])
+        shareView.previewText.text = preview.removeSuffix("\n")
+    }
 }

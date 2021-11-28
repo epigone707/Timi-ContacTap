@@ -172,7 +172,7 @@
     <!-- Login Strings -->
     <string name="name_sign_in_activity">SignInActivity</string>
     <string name="desc_google_icon">Google Logo</string>
-    <string name="title_text">Google Sign-In\nQuickstart</string>
+    <string name="title_text">Google Sign-In</string>
     <string name="signed_out">Signed out</string>
     <string name="sign_out">Sign Out</string>
     <string name="disconnect">Disconnect</string>

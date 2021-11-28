@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley.newRequestQueue
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -15,15 +19,27 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import edu.umich.yanfuguo.contactap.R
+import org.json.JSONObject
 
 
 /**
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
  * profile.
  */
+object LoginInfo {
+    var displayName :String = "Login to Save"
+    const val serverUrl = "https://3.142.95.174/"
+    var idToken :String? = null
+    const val clientId = "142853893477-6fcj283umuv16rsev0mbe97d8v6se7ad.apps.googleusercontent.com"
+}
+
 class SignInActivity : AppCompatActivity(), View.OnClickListener {
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private var mStatusTextView: TextView? = null
+    //private var idToken :String? = null
+    private lateinit var queue: RequestQueue
+    //private val serverUrl = "https://3.142.95.174/"
+    //private val clientId = LoginInfo.clientId
     //private val navHeaderText= findViewById<TextView>(R.id.nav_header_text)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +60,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(LoginInfo.clientId)
             .requestEmail()
             .build()
         // [END configure_signin]
@@ -95,7 +112,26 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
+            LoginInfo.idToken = account.idToken
+            LoginInfo.displayName = account.displayName
+            // SEND TO BACKEND
+            val jsonObj = mapOf(
+                "idToken" to LoginInfo.idToken,
+                "displayName" to LoginInfo.displayName,
+                "clientId" to LoginInfo.clientId
+            )
 
+            val postRequest = JsonObjectRequest(
+                Request.Method.POST,
+                LoginInfo.serverUrl+"login/", JSONObject(jsonObj),
+                { Log.d("login", "Logged in!") },
+                { error -> Log.e("login", error.localizedMessage ?: "JsonObjectRequest error") }
+            )
+
+            if (!this::queue.isInitialized) {
+                queue = newRequestQueue(applicationContext)
+            }
+            queue.add(postRequest)
             // Signed in successfully, show authenticated UI.
             updateUI(account)
         } catch (e: ApiException) {
