@@ -36,8 +36,7 @@ object MyInfoStore {
     lateinit var queue: RequestQueue
     val isThingInitialized get() = this::queue.isInitialized
 
-    //TODO
-    const val serverUrl = "exmaple/"
+    const val serverUrl = "3.142.95.174/"
 
 
     var userId = ""
@@ -187,6 +186,9 @@ object MyInfoStore {
     }
 
 
+    /**
+     * update the view
+     */
     fun updateContent(contactInfoView: ActivityContactInfoBinding) : Uri? {
         val imageUri = if (myInfo.imageUrl != null) {
             val uri = Uri.parse(myInfo.imageUrl)
@@ -224,6 +226,7 @@ object MyInfoStore {
         contactInfoView.contactHobbiesEdit.text?.let{ myInfo.hobbies = it.toString() }
         contactInfoView.contactOtherinfoEdit.text?.let{ myInfo.other = it.toString() }
         contactInfoView.contactBioEdit.text?.let{ myInfo.bio = it.toString() }
+        // TODO: commit() is only used for local testing
         commit(context)
     }
 

@@ -48,6 +48,7 @@ class ProfileListActivity: AppCompatActivity() {
             val name = data?.getStringExtra("name")
             val description = data?.getStringExtra("description")
 
+            // add the new profile to both local storage and back end server
             if (name != null && description != null) {
                 //TODO: insert() is only used for local testing, change insert() to createProfile()
                 insert(this, Profile(name, "", description, "10000000000000"))
