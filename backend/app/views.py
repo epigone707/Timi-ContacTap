@@ -25,33 +25,29 @@ def validateUser(idToken, clientId):
 
     validLoginData = cursor.fetchone()
 
-    if len(validLoginData) > 0:
+    if validLoginData is not None:
         userId = validLoginData[0]
+    else:
+        assert idToken is not None
+        assert clientId is not None
+        idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
 
-    # Need to renew token
-    if userId is None:
-        try:
-            idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
+        userId = idInfo['sub']
 
-            userId = idInfo['sub']
+        cursor.execute(
+            'SELECT * FROM logins WHERE userid = %s',
+            (userId,)
+        )
+        validUser = cursor.rowcount
 
-            cursor.execute(
-                'SELECT * FROM logins WHERE userid = %s',
-                (userId,)
-            )
-            validUser = cursor.rowcount
-
-            # No such user
-            if validUser == 0:
-                return ''
-
-            cursor.execute(
-                'UPDATE logins SET idtoken = %s WHERE userid = %s',
-                (idToken, userId)
-            )
-        except ValueError:
-            # Invalid token
+        # No such user
+        if validUser == 0:
             return ''
+
+        cursor.execute(
+            'UPDATE logins SET idtoken = %s WHERE userid = %s',
+            (idToken, userId)
+        )
 
     # Token, user are both valid
     return userId
@@ -109,7 +105,7 @@ def getcontactinfo(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     cursor = connection.cursor()
     # Get user's contact info, split across these three tables
@@ -124,6 +120,8 @@ def getcontactinfo(request):
     #fetchedData = cursor.fetchone()
     #contactInfo = dict(zip(rowHeaders, fetchedData))
     contactInfo = cursor.fetchone()
+    if contactInfo is None:
+        return HttpResponse(status=404)
 
     contactInfoDict = {
         'name': contactInfo[4],
@@ -161,21 +159,21 @@ def createcontactinfo(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
-    name = json_data['name']
-    personalEmail = json_data['personalEmail']
-    businessEmail = json_data['businessEmail'] or None
-    personalPhone = json_data['personalPhone'] or None
-    businessPhone = json_data['businessPhone'] or None
-    otherPhone = json_data['otherPhone'] or None
-    bio = json_data['bio'] or None
-    instagram = json_data['instagram'] or None
-    snapchat = json_data['snapchat'] or None
-    twitter = json_data['twitter'] or None
-    linkedIn = json_data['linkedIn'] or None
-    hobbies = json_data['hobbies'] or None
-    other = json_data['other'] or None
+    name = json_data.get('name', '')
+    personalEmail = json_data.get('personalEmail', '')
+    businessEmail = json_data.get('businessEmail', '')
+    personalPhone = json_data.get('personalPhone', '')
+    businessPhone = json_data.get('businessPhone', '')
+    otherPhone = json_data.get('otherPhone', '')
+    bio = json_data.get('bio', '')
+    instagram = json_data.get('instagram', '')
+    snapchat = json_data.get('snapchat', '')
+    twitter = json_data.get('twitter', '')
+    linkedIn = json_data.get('linkedIn', '')
+    hobbies = json_data.get('hobbies', '')
+    other = json_data.get('other', '')
 
     # Do image stuff
     imageUrl = ''
@@ -215,7 +213,6 @@ def createcontactinfo(request):
     cursor.execute(
         'INSERT INTO contactinfo (userid, basicinfoid, socialinfoid) VALUES (%s, %s, %s);',
         (userId, basicInfoId, socialInfoId)
-
     )
 
     return JsonResponse({})
@@ -233,21 +230,21 @@ def updatecontactinfo(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
-    name = json_data['name']
-    personalEmail = json_data['personalEmail']
-    businessEmail = json_data['businessEmail'] or None
-    personalPhone = json_data['personalPhone'] or None
-    businessPhone = json_data['businessPhone'] or None
-    otherPhone = json_data['otherPhone'] or None
-    bio = json_data['bio'] or None
-    instagram = json_data['instagram'] or None
-    snapchat = json_data['snapchat'] or None
-    twitter = json_data['twitter'] or None
-    linkedIn = json_data['linkedIn'] or None
-    hobbies = json_data['hobbies'] or None
-    other = json_data['other'] or None
+    name = json_data.get('name', '')
+    personalEmail = json_data.get('personalEmail', '')
+    businessEmail = json_data.get('businessEmail', '')
+    personalPhone = json_data.get('personalPhone', '')
+    businessPhone = json_data.get('businessPhone', '')
+    otherPhone = json_data.get('otherPhone', '')
+    bio = json_data.get('bio', '')
+    instagram = json_data.get('instagram', '')
+    snapchat = json_data.get('snapchat', '')
+    twitter = json_data.get('twitter', '')
+    linkedIn = json_data.get('linkedIn', '')
+    hobbies = json_data.get('hobbies', '')
+    other = json_data.get('other', '')
 
     # Do image stuff
     imageUrl = ''
@@ -270,6 +267,8 @@ def updatecontactinfo(request):
     )
 
     contactInfoRow = cursor.fetchone()
+    if contactInfoRow is None:
+        return createcontactinfo(request)
     contactInfo = {}
     contactInfo['basicInfoId'] = contactInfoRow[1]
     contactInfo['socialInfoId'] = contactInfoRow[2]
@@ -303,7 +302,7 @@ def getprofiles(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM profiles WHERE userid = %s;', (userId,))
@@ -337,7 +336,7 @@ def createprofile(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     includeBitString = json_data['includeBitString']
     profileName = json_data['profileName']
@@ -368,7 +367,7 @@ def updateprofile(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     profileName = json_data['profileName']
     profileId = json_data['profileId']
@@ -397,7 +396,7 @@ def deleteprofile(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     profileId = json_data['profileId']
 
@@ -419,7 +418,7 @@ def createconnection(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     profileId = json_data['profileId']
     location = json_data['location']
@@ -447,7 +446,7 @@ def deleteconnection(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     profileId = json_data['profileId']
 
@@ -469,7 +468,7 @@ def getconnections(request):
     userId = validateUser(idToken, clientId)
 
     if userId is None:
-        return HttpException(status=401)
+        return HttpResponse(status=401)
 
     cursor = connection.cursor()
 

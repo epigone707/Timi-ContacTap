@@ -16,9 +16,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import edu.umich.yanfuguo.contactap.R
+import edu.umich.yanfuguo.contactap.model.ConnectionStore
+import edu.umich.yanfuguo.contactap.model.LoginInfo
+import edu.umich.yanfuguo.contactap.model.MyInfoStore
+import edu.umich.yanfuguo.contactap.model.MyInfoStore.serverUrl
+import edu.umich.yanfuguo.contactap.model.ProfileStore
+import edu.umich.yanfuguo.contactap.toast
 import org.json.JSONObject
 
 
@@ -26,19 +31,12 @@ import org.json.JSONObject
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
  * profile.
  */
-object LoginInfo {
-    var displayName :String = "Login to Save"
-    const val serverUrl = "https://3.142.95.174/"
-    var idToken :String? = null
-    const val clientId = "142853893477-6fcj283umuv16rsev0mbe97d8v6se7ad.apps.googleusercontent.com"
-}
 
 class SignInActivity : AppCompatActivity(), View.OnClickListener {
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private var mStatusTextView: TextView? = null
     //private var idToken :String? = null
     private lateinit var queue: RequestQueue
-    //private val serverUrl = "https://3.142.95.174/"
     //private val clientId = LoginInfo.clientId
     //private val navHeaderText= findViewById<TextView>(R.id.nav_header_text)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +71,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
         // [START customize_button]
         // Set the dimensions of the sign-in button.
         val signInButton = findViewById<SignInButton>(R.id.sign_in_button)
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setSize(SignInButton.SIZE_STANDARD)
         signInButton.setColorScheme(SignInButton.COLOR_LIGHT)
         // [END customize_button]
     }
@@ -123,7 +121,7 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
 
             val postRequest = JsonObjectRequest(
                 Request.Method.POST,
-                LoginInfo.serverUrl+"login/", JSONObject(jsonObj),
+                serverUrl+"login/", JSONObject(jsonObj),
                 { Log.d("login", "Logged in!") },
                 { error -> Log.e("login", error.localizedMessage ?: "JsonObjectRequest error") }
             )
@@ -178,12 +176,21 @@ class SignInActivity : AppCompatActivity(), View.OnClickListener {
             //navHeaderText.text = getString(R.string.signed_in_fmt, account.displayName)
             findViewById<View>(R.id.sign_in_button).visibility = View.GONE
             findViewById<View>(R.id.sign_out_and_disconnect).visibility = View.VISIBLE
+            findViewById<View>(R.id.restore_button).visibility = View.VISIBLE
         } else {
             mStatusTextView!!.setText(R.string.signed_out)
             //navHeaderText.text = getString(R.string.signed_out)
             findViewById<View>(R.id.sign_in_button).visibility = View.VISIBLE
             findViewById<View>(R.id.sign_out_and_disconnect).visibility = View.GONE
+            findViewById<View>(R.id.restore_button).visibility = View.GONE
         }
+        LoginInfo.commit(this)
+    }
+
+    fun restore(v: View){
+        MyInfoStore.getMyInfo(this) { toast("Contact info restored") }
+        ProfileStore.getProfiles(this) { toast("Profiles restored") }
+        ConnectionStore.getMyConnections(this) { toast("Connection restored") }
     }
 
     override fun onClick(v: View) {

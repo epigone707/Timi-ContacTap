@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import edu.umich.yanfuguo.contactap.databinding.ActivityMainBinding
 import edu.umich.yanfuguo.contactap.model.ConnectionStore
+import edu.umich.yanfuguo.contactap.model.LoginInfo
 import edu.umich.yanfuguo.contactap.model.MyInfoStore
 import edu.umich.yanfuguo.contactap.model.ProfileStore
 import edu.umich.yanfuguo.contactap.nfc.KHostApduService
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Restore data model
+        LoginInfo.init(this)
         ProfileStore.init(this)
         MyInfoStore.init(this)
         ConnectionStore.init(this)
@@ -54,8 +56,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-
 
         // Disable sharing by default
         packageManager.setComponentEnabledSetting(

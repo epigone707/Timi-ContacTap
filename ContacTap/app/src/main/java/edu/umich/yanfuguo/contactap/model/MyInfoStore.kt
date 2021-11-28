@@ -36,7 +36,7 @@ object MyInfoStore {
     lateinit var queue: RequestQueue
     val isThingInitialized get() = this::queue.isInitialized
 
-    const val serverUrl = "3.142.95.174/"
+    const val serverUrl = "https://www.contactap.xyz/"
 
 
     var userId = ""
@@ -73,14 +73,15 @@ object MyInfoStore {
     fun getMyInfo(context: Context, completion: () -> Unit) {
 
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
-            MyInfoStore.serverUrl +"contactinfo/",
+            serverUrl +"contactinfo/",
             JSONObject(jsonObj),
             { response ->
-                val contactInfo = response.getJSONObject("contactinfo")
+                val contactInfo = response.getJSONObject("contactInfo")
                 myInfo.name = contactInfo.getString("name")
                 myInfo.imageUrl = contactInfo.getString("imageUrl")
                 myInfo.personalEmail = contactInfo.getString("personalEmail")
@@ -114,7 +115,8 @@ object MyInfoStore {
      */
     fun postMyInfo(context: Context, contact: Contact) {
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId,
             "name" to contact.name,
             "imageUrl" to contact.imageUrl,
             "businessEmail" to contact.personalEmail,
@@ -148,8 +150,12 @@ object MyInfoStore {
      * information (without changing profile image), the app will send this request.
      */
     fun updateMyInfo(context: Context, contact: Contact) {
+        if (LoginInfo.idToken == null) {
+            commit(context)
+        }
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId,
             "name" to contact.name,
             "imageUrl" to contact.imageUrl,
             "businessEmail" to contact.personalEmail,
@@ -167,7 +173,10 @@ object MyInfoStore {
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
             this.serverUrl +"contactinfo/update/", JSONObject(jsonObj),
-            { Log.d("updateMyInfo", " posted!") },
+            {
+                Log.d("updateMyInfo", " posted!")
+                commit(context)
+            },
             { error -> Log.e("updateMyInfo", error.localizedMessage ?: "JsonObjectRequest error") }
         )
 
@@ -226,8 +235,7 @@ object MyInfoStore {
         contactInfoView.contactHobbiesEdit.text?.let{ myInfo.hobbies = it.toString() }
         contactInfoView.contactOtherinfoEdit.text?.let{ myInfo.other = it.toString() }
         contactInfoView.contactBioEdit.text?.let{ myInfo.bio = it.toString() }
-        // TODO: commit() is only used for local testing
-        commit(context)
+        updateMyInfo(context, myInfo)
     }
 
     /**
@@ -273,6 +281,8 @@ object MyInfoStore {
                     obj.put(InfoKeys[idx], "")
                 }
             }
+            obj.put("profileId", profile.profileId)
+            obj.put("includeBitString", profile.includeBitString)
         }
         return obj.toString()
     }
