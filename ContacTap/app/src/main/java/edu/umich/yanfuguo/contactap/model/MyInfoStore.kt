@@ -265,16 +265,16 @@ object MyInfoStore {
      * return a JSONObject that contains real data of a profile instead of bitstring
      * used in share screen(ShareActivity)
      */
-    fun getMaskedInfo(profile: Profile?) : JSONObject {
+    fun getMaskedInfo(profile: Profile?) : String {
         val obj = try { JSONObject(Gson().toJson(myInfo)) } catch (e: JSONException) { JSONObject() }
         if (profile != null) {
             for (idx in profile.includeBitString.indices) {
                 if(profile.includeBitString[idx] =='0'){
-                    obj.remove(InfoKeys[idx])
+                    obj.put(InfoKeys[idx], "")
                 }
             }
         }
-        return obj
+        return obj.toString()
     }
 
     /**

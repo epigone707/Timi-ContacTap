@@ -108,7 +108,7 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         // gen message
         val info = getMaskedInfo(profiles[selectedId])
-        intent.putExtra("ndefMessage", Gson().toJson(info))
+        intent.putExtra("ndefMessage", info)
 
         // toggle service
         if(enable) {
