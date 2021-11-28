@@ -6,6 +6,7 @@
 
 ![Elevator Pitch](/assets/title.png)
 ![Team](/assets/team.png)
+This is just a rough snapshot of what everyone does. To see details, please go to [Team Rouster](https://github.com/epigone707/Timi-ContacTap/wiki/5.-Team-Roster)
 
 [demo_page]: https://www.youtube.com/watch?v=8MrBdQ2NzP8
 [wiki_page]: https://github.com/epigone707/Timi-ContacTap/wiki
