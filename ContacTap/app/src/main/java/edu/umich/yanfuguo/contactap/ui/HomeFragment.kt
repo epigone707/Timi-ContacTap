@@ -48,6 +48,15 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
     }
 
+    override fun onResume() {  // After a pause OR at startup
+        super.onResume()
+        //Refresh your stuff here
+        Log.d("HomeFragment","onResume, refresh")
+        val preview = getOverview()
+        fragmentHomeBinding?.cardTitle?.text  = myInfo.name
+        fragmentHomeBinding?.cardInfo?.text = preview.removeSuffix("\n")
+    }
+
 
 
 }
