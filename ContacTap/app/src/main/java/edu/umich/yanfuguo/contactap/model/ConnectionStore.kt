@@ -73,6 +73,7 @@ object ConnectionStore {
             JSONObject(jsonObj),
             { response ->
                 val received = try { response.getJSONArray("connections") } catch (e: JSONException) { JSONArray() }
+                connections.clear()
                 for (i in 0 until received.length()) {
                     val entry = received[i] as JSONObject
                     connections.add(Contact(

@@ -201,7 +201,7 @@ object ProfileStore {
     /**
      * Communicate with Delete Profile API
      */
-    fun deleteProfile(context: Context, profileId: String) {
+    fun deleteProfile(context: Context, profileId: String, completion: () -> Unit) {
         val jsonObj = mapOf(
             "idToken" to LoginInfo.idToken,
             "clientId" to LoginInfo.clientId,
@@ -223,6 +223,7 @@ object ProfileStore {
                 }
                 Log.d("deleteProfile", " deleted!")
                 commit(context)
+                completion()
             },
             { error -> Log.e("deleteProfile", error.localizedMessage ?: "JsonObjectRequest error") }
         )

@@ -22,6 +22,7 @@ import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedInfo
 import edu.umich.yanfuguo.contactap.model.MyInfoStore.getMaskedOverview
 import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.model.ProfileStore
+import edu.umich.yanfuguo.contactap.model.ProfileStore.createProfile
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
 import edu.umich.yanfuguo.contactap.nfc.KHostApduService
 import edu.umich.yanfuguo.contactap.toast
@@ -83,13 +84,14 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 Profile(forkName, "", forkDescription, it1)
             }?.let { it2 ->
                 //TODO: insert() is only used for local testing, change insert() to createProfile()
-                ProfileStore.insert(this, it2)
+                createProfile(this, it2.includeBitString, it2.name, it2.description) {
+                    spinnerAdapter.clear()
+                    val tempitems = profiles.map {p ->p?.name}
+                    spinnerAdapter.addAll(tempitems)
+                    spinnerAdapter.notifyDataSetChanged()
+                    shareView.profileSelector.setSelection(profiles.size - 1)
+                }
             }
-            spinnerAdapter.clear()
-            val tempitems = profiles.map {p ->p?.name}
-            spinnerAdapter.addAll(tempitems)
-            spinnerAdapter.notifyDataSetChanged()
-            shareView.profileSelector.setSelection(profiles.size - 1)
         }
     }
 
@@ -185,7 +187,7 @@ class ShareActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         // Update UI
         shareView.shareButton.backgroundTintList = ColorStateList.valueOf(
             getColor(if(isSharing) share_active else share_inactive))
-        shareView.shareButton.text = if (isSharing) "SHAREING" else "SHARE"
+        shareView.shareButton.text = if (isSharing) "SHARING" else "SHARE"
     }
 
     override fun onResume() {  // After a pause OR at startup
