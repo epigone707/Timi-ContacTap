@@ -11,7 +11,7 @@ ContacTap is an Android app that allows users quickly and easily exchange their 
 ![Team](/assets/team.png)
 This is just a rough snapshot of what everyone does. To see details, please go to [Team Rouster](https://github.com/epigone707/Timi-ContacTap/wiki/5.-Team-Roster)
 
-[demo_page]: https://www.youtube.com/watch?v=8MrBdQ2NzP8
+[demo_page]: https://www.youtube.com/watch?v=DIosQAuC2qU
 [wiki_page]: https://github.com/epigone707/Timi-ContacTap/wiki
 [process_page]: https://trello.com/b/TqJAwI0i/contactap
 
