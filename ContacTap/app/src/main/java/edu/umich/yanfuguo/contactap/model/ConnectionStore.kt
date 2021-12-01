@@ -64,14 +64,16 @@ object ConnectionStore {
      */
     fun getMyConnections(context: Context, completion: () -> Unit) {
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId
         )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
             MyInfoStore.serverUrl +"connections/",
             JSONObject(jsonObj),
             { response ->
-                val received = try { response.getJSONArray("chatts") } catch (e: JSONException) { JSONArray() }
+                val received = try { response.getJSONArray("connections") } catch (e: JSONException) { JSONArray() }
+                connections.clear()
                 for (i in 0 until received.length()) {
                     val entry = received[i] as JSONObject
                     connections.add(Contact(
@@ -106,13 +108,15 @@ object ConnectionStore {
      * Happens after a successful contact exchange between two users.
      * Communicate with Create Connection API
      */
-    fun createConnection(context: Context, profileId: String, location: String) {
+    fun createConnection(context: Context, profileId: String, newIncludeBitString: String, location: String) {
         val date = Calendar.getInstance().time
         val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
         val formatedDate = formatter.format(date)
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId,
             "profileId" to profileId,
+            "newIncludeBitString" to newIncludeBitString,
             "location" to location,
             "time" to formatedDate
         )

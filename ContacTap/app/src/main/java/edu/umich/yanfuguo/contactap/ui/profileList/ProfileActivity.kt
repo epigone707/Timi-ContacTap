@@ -153,8 +153,9 @@ class ProfileActivity : AppCompatActivity() {
             current_profile?.includeBitString = string
         }
         // update the profile in both local storage and back end
-        //TODO: commit() is only used for local testing, change commit() to updateProfile()
-        ProfileStore.commit(this)
+        current_profile?.also {
+            ProfileStore.updateProfile(this, it.profileId, it.includeBitString, it.name, it.description)
+        }
 
     }
 

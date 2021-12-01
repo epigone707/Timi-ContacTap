@@ -16,8 +16,6 @@ data class Contact (
     var linkedIn: String = "",
     var hobbies: String = "",
     var other: String = "",
-
-
-
-
+    var profileId: String = "",
+    var includeBitString: String = ""
 )

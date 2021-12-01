@@ -74,8 +74,9 @@ object ProfileStore {
     fun getProfiles(context: Context, completion: () -> Unit) {
 
         val jsonObj = mapOf(
-            "userId" to userId,
-        )
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId
+            )
         val postRequest = JsonObjectRequest(
             Request.Method.POST,
             MyInfoStore.serverUrl +"profiles/",
@@ -111,9 +112,13 @@ object ProfileStore {
      * then store the profile in local storage
      * communicate with Create Profile API
      */
-    fun createProfile(context: Context, includeBitString: String, profileName: String, description: String) {
+    fun createProfile(context: Context, includeBitString: String, profileName: String, description: String, completion: () -> Unit) {
+        if (LoginInfo.idToken == null) {
+            commit(context)
+        }
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId,
             "includeBitString" to includeBitString,
             "profileName" to profileName,
             "description" to description
@@ -134,8 +139,9 @@ object ProfileStore {
                         includeBitString = includeBitString
                     )
                 )
-                Log.d("createProfile", " created!")
                 commit(context)
+                Log.d("createProfile", " created!")
+                completion()
             },
             { error -> Log.e("createProfile", error.localizedMessage ?: "JsonObjectRequest error") }
         )
@@ -154,9 +160,9 @@ object ProfileStore {
      */
     fun updateProfile(context: Context, profileId: String, includeBitString: String,
                       profileName: String, description: String) {
-
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId,
             "profileName" to profileName,
             "description" to description,
             "profileId" to profileId,
@@ -195,9 +201,10 @@ object ProfileStore {
     /**
      * Communicate with Delete Profile API
      */
-    fun deleteProfile(context: Context, profileId: String) {
+    fun deleteProfile(context: Context, profileId: String, completion: () -> Unit) {
         val jsonObj = mapOf(
-            "userId" to userId,
+            "idToken" to LoginInfo.idToken,
+            "clientId" to LoginInfo.clientId,
             "profileId" to profileId,
         )
         val postRequest = JsonObjectRequest(
@@ -216,6 +223,7 @@ object ProfileStore {
                 }
                 Log.d("deleteProfile", " deleted!")
                 commit(context)
+                completion()
             },
             { error -> Log.e("deleteProfile", error.localizedMessage ?: "JsonObjectRequest error") }
         )

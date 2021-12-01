@@ -33,7 +33,9 @@ open class ReceiveActivity : AppCompatActivity() {
                     builder.append(record.str()).append("\n")
                 }
                 ConnectionStore.init(this)
-                ConnectionStore.insert(this, Gson().fromJson(builder.toString(), Contact::class.java))
+                val _contact = Gson().fromJson(builder.toString(), Contact::class.java)
+                ConnectionStore.insert(this, _contact)
+                ConnectionStore.createConnection(this, _contact.profileId, _contact.includeBitString, "")
 
                 val _intent = Intent(this, ContactActivity::class.java)
                 val pendingIntent = PendingIntent.getActivity(this, 0, _intent, 0)
