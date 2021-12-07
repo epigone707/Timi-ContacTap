@@ -179,4 +179,8 @@
     <string name="signed_in_fmt">Signed in as: %s</string>
     <string name="edit_your_info">My Info</string>
     <string name="fork">Fork</string>
+    <string name="dialog_text">You need to log in using your Google account to create a profile. Do you want to log in?</string>
+    <string name="dialog_login">Yes</string>
+    <string name="dialog_cancel">I want to see how it works before I log in</string>
+
 </resources>
