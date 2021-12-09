@@ -108,7 +108,8 @@
                 app:layout_constraintBottom_toTopOf="@id/contact_name_field"
                 app:layout_constraintStart_toStartOf="parent" />
 
-
+            
+            <!-- Input textbox style reference: https://material.io/components/text-fields/android#using-text-fields -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/contact_name_field"
                 android:hint="@string/contact_info_name_title"
