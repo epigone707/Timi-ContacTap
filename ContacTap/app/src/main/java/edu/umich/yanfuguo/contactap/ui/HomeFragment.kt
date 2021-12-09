@@ -3,6 +3,7 @@ package edu.umich.yanfuguo.contactap.ui
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,10 +57,17 @@ class HomeFragment : Fragment() {
                         val intent = Intent(activity, SignInActivity::class.java)
                         startActivity(intent)
                     }
-                    setNegativeButton("No",
+                    setNegativeButton(
+                        "No",
                     ){ dialog, _ ->
                             dialog.cancel()
                     }
+                    setNeutralButton("No. I want to have a taste first."){ dialog, _ ->
+                        dialog.cancel()
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=DIosQAuC2qU"))
+                        startActivity(intent);
+                    }
+
                     setTitle("Sorry!")
                 }
                 // Set other dialog properties

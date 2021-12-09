@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -54,6 +55,11 @@ class ProfileListActivity: AppCompatActivity() {
             ){ dialog, _ ->
                     dialog.cancel()
                 }
+            builder.setNeutralButton("No. I want to have a taste first."){ dialog, _ ->
+                dialog.cancel()
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=DIosQAuC2qU"))
+                startActivity(intent);
+            }
             builder.setTitle("Sorry!")
             val dialog = builder.create()
             dialog.show()
