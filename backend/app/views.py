@@ -14,6 +14,7 @@ import psycopg2.extras
 
 # Helper function for checking idToken on requests
 # Returns userId on sucess, empty string on fail
+# We use oauth2 to validate tokens
 def validateUser(idToken, clientId):
     userId = ''
     cursor = connection.cursor()
@@ -30,6 +31,7 @@ def validateUser(idToken, clientId):
     else:
         assert idToken is not None
         assert clientId is not None
+        # Source: https://developers.google.com/identity/sign-in/android/backend-auth
         idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
 
         userId = idInfo['sub']
@@ -63,6 +65,7 @@ def login(request):
     displayName = json_data['displayName']
 
     # Specify the CLIENT_ID of the app that accesses the backend:
+    # Source: https://developers.google.com/identity/sign-in/android/backend-auth
     idInfo = id_token.verify_oauth2_token(idToken, requests.Request(), clientId)
 
     # ID token is valid. Get the user's Google Account ID from the decoded token.
