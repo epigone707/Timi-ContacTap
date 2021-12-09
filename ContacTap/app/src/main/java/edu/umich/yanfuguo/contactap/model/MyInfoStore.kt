@@ -146,7 +146,7 @@ object MyInfoStore {
     }
 
     /**
-     * Back up user's whole set profiles setting to the server.
+     * Back up user's whole set setting to the server.
      * Every time the user makes changes to whole set contact
      * information (without changing profile image), the app will send this request.
      */

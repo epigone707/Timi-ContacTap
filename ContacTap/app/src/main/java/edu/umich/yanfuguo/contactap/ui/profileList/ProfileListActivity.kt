@@ -1,15 +1,21 @@
 package edu.umich.yanfuguo.contactap.ui.profileList
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import edu.umich.yanfuguo.contactap.R
 import edu.umich.yanfuguo.contactap.databinding.ActivityProfileListBinding
+import edu.umich.yanfuguo.contactap.model.LoginInfo
 import edu.umich.yanfuguo.contactap.model.Profile
 import edu.umich.yanfuguo.contactap.model.ProfileStore.createProfile
 import edu.umich.yanfuguo.contactap.model.ProfileStore.insert
 import edu.umich.yanfuguo.contactap.model.ProfileStore.profiles
+import edu.umich.yanfuguo.contactap.ui.SignInActivity
 
 class ProfileListActivity: AppCompatActivity() {
     private lateinit var profileAdapter: ProfileAdapter
@@ -32,6 +38,29 @@ class ProfileListActivity: AppCompatActivity() {
         binding.fab.setOnClickListener {
             val intent = Intent(this@ProfileListActivity, ProfileAddActivity::class.java)
             forAddResult.launch(intent)
+        }
+        if(LoginInfo.idToken==null) {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage(R.string.dialog_text)
+            builder.setPositiveButton(
+                    R.string.dialog_login
+                ) { _, _ ->
+                    // User clicked OK button
+                    val intent = Intent(this, SignInActivity::class.java)
+                    startActivity(intent)
+                }
+            builder.setNegativeButton(
+                "No",
+            ){ dialog, _ ->
+                    dialog.cancel()
+                }
+            builder.setTitle("Sorry!")
+            val dialog = builder.create()
+            dialog.show()
+
+            Log.d("ProfileListActivity", "not login. show alert dialog.")
+        }else{
+            Log.d("ProfileListActivity","already login.")
         }
     }
 
