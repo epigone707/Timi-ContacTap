@@ -9,7 +9,7 @@ ContacTap is an Android app that allows users quickly and easily exchange their 
 
 ![Elevator Pitch](/assets/title.png)
 ![Team](/assets/team.png)
-This is just a rough snapshot of what everyone does. To see details, please go to [Team Rouster](https://github.com/epigone707/Timi-ContacTap/wiki/5.-Team-Roster)
+This is just a rough snapshot of what everyone does. To see details, please go to [Team Roster](https://github.com/epigone707/Timi-ContacTap/wiki/5.-Team-Roster)
 
 [demo_page]: https://www.youtube.com/watch?v=DIosQAuC2qU
 [wiki_page]: https://github.com/epigone707/Timi-ContacTap/wiki
