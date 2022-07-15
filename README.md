@@ -1,4 +1,4 @@
-# UM EECS441§3&4 F21 Timi
+# ContacTap
 
 | Demo  |  Wiki |  Trello  |
 |:-----:|:-----:|:--------:|
